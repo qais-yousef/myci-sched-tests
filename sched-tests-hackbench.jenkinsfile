@@ -1,0 +1,50 @@
+pipeline {
+	agent { label params.NODE }
+
+	stages {
+		stage('Connect') {
+			steps {
+				verify_android()
+				connect()
+			}
+		}
+		stage('Prepare Agenda') {
+			steps {
+				fixup_agenda("agendas/hackbench.yaml", "ITERATIONS", env.ITERATIONS)
+				fixup_agenda("agendas/hackbench.yaml", "DELAY", env.DELAY)
+				fixup_agenda("agendas/hackbench.yaml", "LOOPS", env.LOOPS)
+				fixup_agenda("agendas/hackbench.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
+			}
+		}
+		stage('Hackbench-WA') {
+			steps {
+				run_wa("agendas/hackbench.yaml")
+			}
+		}
+		stage('Generate Plots') {
+			steps {
+				plot_wa_power(params.NODE, "hackbench")
+				plot_wa_results(params.NODE, "hackbench")
+			}
+		}
+		stage('tar wa_output') {
+			steps {
+				tar_wa_output()
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
+				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: 'results.txt', followSymlinks: false
+				archiveArtifacts artifacts: 'power.txt', followSymlinks: false
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+			disconnect()
+		}
+	}
+}
