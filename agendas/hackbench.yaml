@@ -1,0 +1,59 @@
+config:
+    augmentations:
+    - energy_measurement
+    iterations: ITERATIONS
+    device: generic_android
+    device_config:
+        adb_server: null
+        big_core: null
+        core_clusters: null
+        core_names: null
+        device: DEVICE
+        disable_selinux: true
+        executables_directory: null
+        load_default_modules: true
+        logcat_poll_period: null
+        model: null
+        modules: null
+        package_data_directory: /data/data
+        poll_transfers: true
+        shell_prompt: !<tag:wa:regex> '40:^.*(shell|root|juno)@?.*:[/~]\S* *[#$] '
+        start_transfer_poll_delay: 30
+        stay_on_mode: null
+        total_transfer_timeout: 3600
+        transfer_poll_period: 30
+        working_directory: null
+    energy_measurement:
+        channels: null
+        cleanup_assets: true
+        instrument: battery_monitor
+        instrument_parameters:
+            current_node: null
+            current_scale: 1000000.0
+            period: 1
+            voltage_scale: 1000.0
+        kinds: null
+        sites: null
+    delay:
+        active_cooling: false
+        cleanup_assets: true
+        fixed_before_start: null
+        fixed_between_jobs: DELAY
+        fixed_between_specs: null
+        temperature_before_start: null
+        temperature_between_jobs: null
+        temperature_between_specs: null
+        temperature_file: /sys/devices/virtual/thermal/thermal_zone0/temp
+        temperature_poll_period: 5
+        temperature_timeout: 600
+workloads:
+-   name: hackbench
+    params:
+        cleanup_assets: true
+        datasize: 100
+        extra_params: ''
+        fds: 40
+        groups: 10
+        loops: LOOPS
+        timeout: 60
+        uninstall: true
