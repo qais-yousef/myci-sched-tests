@@ -1,0 +1,4 @@
+jobs/*/builds/*
+jobs/*/workspace*/*
+jobs/*/nextBuildNumber
+!jobs/
