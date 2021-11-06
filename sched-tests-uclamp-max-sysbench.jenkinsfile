@@ -1,0 +1,50 @@
+pipeline {
+	agent { label params.NODE }
+
+	stages {
+		stage('Verify') {
+			steps {
+				verify_linux()
+			}
+		}
+		stage('Sysbench Idle') {
+			steps {
+				sysbench(env.ITERATIONS, env.NUMTHREADS, env.DELAY, "sysbench_idle.csv")
+			}
+		}
+		stage('Sysbench Youtube') {
+			steps {
+				sh "firefox -headless 'https://www.youtube.com/watch?v=vAuOfRRmtSc&t=0s' &"
+				sysbench(env.ITERATIONS, env.NUMTHREADS, env.DELAY, "sysbench_youtube.csv")
+				sh "pkill -u \$(whoami) GeckoMain"
+			}
+		}
+		stage('Sysbench Youtube 2 Browsers') {
+			steps {
+				sh "firefox -headless 'https://www.youtube.com/watch?v=vAuOfRRmtSc&t=0s' &"
+				sh "chromium-browser --headless --autoplay-policy=no-user-gesture-required --remote-debugging-port=9223 'https://www.youtube.com/watch?v=vAuOfRRmtSc&t=0s' &"
+				sysbench(env.ITERATIONS, env.NUMTHREADS, env.DELAY, "sysbench_youtube_2_browsers.csv")
+				sh "pkill -u \$(whoami) GeckoMain"
+				sh "pkill -u \$(whoami) chromium-browse"
+			}
+		}
+		stage('Generate Result') {
+			steps {
+				plot_sysbench()
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.csv', followSymlinks: false
+				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: '*.txt', followSymlinks: false
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+		}
+	}
+}
+
