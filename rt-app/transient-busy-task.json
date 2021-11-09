@@ -1,0 +1,38 @@
+{
+	"tasks" : {
+		"thread0" : {
+			"instance" : 1,
+			"loop" : 1,
+			"cpus": [0],
+			"phases": {
+				"small": {
+					"loop" : 124,
+					"run" :   1000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"big": {
+					"loop" : 124,
+					"run" :   16000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				}
+			}
+		}
+	},
+	"global" : {
+		"duration" : -1,
+		"calibration" : CALIBRATION_VAL,
+		"default_policy" : "SCHED_OTHER",
+		"pi_enabled" : false,
+		"lock_pages" : false,
+		"logdir" : "./",
+		"log_basename" : "transient-busy-task",
+		"gnuplot" : false,
+		"cumulative_slack" : false
+	}
+}
