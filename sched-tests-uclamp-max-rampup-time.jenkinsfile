@@ -1,0 +1,49 @@
+pipeline {
+	agent { label params.NODE }
+
+	stages {
+		stage('Verify') {
+			steps {
+				verify_linux()
+			}
+		}
+		stage('Calibrate rt-app') {
+			steps {
+				calibrate_rt_app()
+			}
+		}
+		stage('Max perf rampup time') {
+			steps {
+				uclamp_rampup_time(1024, 1024, "uclamp_rampup_time_max_perf.csv")
+			}
+		}
+		stage('Min perf rampup time') {
+			steps {
+				uclamp_rampup_time(0, 0, "uclamp_rampup_time_min_perf.csv")
+			}
+		}
+		stage('Normal rampup time') {
+			steps {
+				uclamp_rampup_time(0, 1024, "uclamp_rampup_time_normal.csv")
+			}
+		}
+		stage('Generate Result') {
+			steps {
+				plot_rampup_time()
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.csv', followSymlinks: false
+				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: '*.txt', followSymlinks: false
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+		}
+	}
+}
+
