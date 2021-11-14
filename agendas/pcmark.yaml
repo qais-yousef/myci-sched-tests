@@ -1,6 +1,5 @@
 config:
     augmentations:
-    - energy_measurement
     - delay
     iterations: ITERATIONS
     device: generic_android
@@ -24,17 +23,6 @@ config:
         total_transfer_timeout: 3600
         transfer_poll_period: 30
         working_directory: null
-    energy_measurement:
-        channels: null
-        cleanup_assets: true
-        instrument: battery_monitor
-        instrument_parameters:
-            current_node: null
-            current_scale: 1000000.0
-            period: 1
-            voltage_scale: 1000.0
-        kinds: null
-        sites: null
     delay:
         active_cooling: false
         cleanup_assets: true

@@ -23,7 +23,7 @@ pipeline {
 		}
 		stage('Generate Plots') {
 			steps {
-				plot_wa_power(params.NODE, "hackbench")
+				//plot_wa_power(params.NODE, "hackbench")
 				plot_wa_results(params.NODE, "hackbench")
 			}
 		}
@@ -37,7 +37,7 @@ pipeline {
 				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
 				archiveArtifacts artifacts: 'results.txt', followSymlinks: false
-				archiveArtifacts artifacts: 'power.txt', followSymlinks: false
+				//archiveArtifacts artifacts: 'power.txt', followSymlinks: false
 			}
 		}
 	}
