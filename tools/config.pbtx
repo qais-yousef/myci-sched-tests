@@ -15,6 +15,7 @@ data_sources: {
             ftrace_events: "sched/sched_switch"
             ftrace_events: "sched/sched_process_exit"
             ftrace_events: "sched/sched_process_free"
+            ftrace_events: "sched/sched_stat_runtime"
             ftrace_events: "sched/sched_pelt_se"
             ftrace_events: "sched/sched_pelt_cfs"
             ftrace_events: "sched/schedutil_cpu_util_clamp"
