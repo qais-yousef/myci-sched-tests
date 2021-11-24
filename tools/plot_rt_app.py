@@ -36,19 +36,6 @@ for file in sorted(os.listdir()):
         df_result.slack.plot.box(title='slack box')
 
         try:
-            df_freq.ts = df_freq.ts - df_freq.ts[0]
-            df_freq.ts = df_freq.ts / 1000000000
-            df_freq.freq = df_freq.freq / 1000000
-            df_freq.set_index('ts', inplace=True)
-
-            df_freq = df_freq[df_freq.cpu == 0]
-
-            plt.subplot(6, 1, 2)
-            df_freq.freq.plot(title='frequency', alpha=0.75, drawstyle='steps-post', xlim=(df_util.index[0], df_util.index[-1]))
-        except:
-            pass
-
-        try:
             df_util.ts = df_util.ts - df_util.ts[0]
             df_util.ts = df_util.ts / 1000000000
             df_util.set_index('ts', inplace=True)
@@ -60,6 +47,19 @@ for file in sorted(os.listdir()):
             plt.subplot(6, 1, 3)
             df_util.groupby('comm').util.plot(title='util', alpha=0.75, xlim=(df_util.index[0], df_util.index[-1]))
             plt.axhline(y=100, color='r', linestyle='-')
+        except:
+            pass
+
+        try:
+            df_freq.ts = df_freq.ts - df_freq.ts[0]
+            df_freq.ts = df_freq.ts / 1000000000
+            df_freq.freq = df_freq.freq / 1000000
+            df_freq.set_index('ts', inplace=True)
+
+            df_freq = df_freq[df_freq.cpu == 0]
+
+            plt.subplot(6, 1, 2)
+            df_freq.freq.plot(title='frequency', alpha=0.75, drawstyle='steps-post', xlim=(df_util.index[0], df_util.index[-1]))
         except:
             pass
 
