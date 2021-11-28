@@ -8,6 +8,26 @@
 `pip3 install tabulate`
 `pip3 install perfetto`
 
+## Common tools on all type of DUTs
+
+### uclampset
+
+We need uclampset which is part of util-linux 2.37.2
+
+`sudo apt install util-linux`
+
+If your distro's version is old you can build it from source:
+
+[https://github.com/util-linux/util-linux](https://github.com/util-linux/util-linux)
+
+```
+git clone https://github.com/util-linux/util-linux.git
+cd util-linux
+./autogen.sh
+./configure
+sudo cp uclampset /usr/local/bin/
+```
+
 ## On Android DUT
 
 You need to install pcmark from Play store.
