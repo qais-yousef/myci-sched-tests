@@ -30,7 +30,8 @@ pipeline {
 				sh "chromium-browser --headless --autoplay-policy=no-user-gesture-required --remote-debugging-port=9223 'https://www.youtube.com/watch?v=vAuOfRRmtSc&t=0s' &"
 				sysbench(env.ITERATIONS, env.NUMTHREADS, env.DELAY, "sysbench_youtube_2_browsers.csv")
 				sh "pkill -u \$(whoami) GeckoMain"
-				sh "pkill -u \$(whoami) chromium-browse"
+				sh "pkill -u \$(whoami) chromium-browse || true"
+				sh "pkill -u \$(whoami) chrome || true"
 				stop_perfetto()
 			}
 		}
