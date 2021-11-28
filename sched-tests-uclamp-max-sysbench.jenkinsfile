@@ -9,23 +9,29 @@ pipeline {
 		}
 		stage('Sysbench Idle') {
 			steps {
+				start_perfetto("sysbench_idle")
 				sysbench(env.ITERATIONS, env.NUMTHREADS, env.DELAY, "sysbench_idle.csv")
+				stop_perfetto()
 			}
 		}
 		stage('Sysbench Youtube') {
 			steps {
+				start_perfetto("sysbench_youtube")
 				sh "firefox -headless 'https://www.youtube.com/watch?v=vAuOfRRmtSc&t=0s' &"
 				sysbench(env.ITERATIONS, env.NUMTHREADS, env.DELAY, "sysbench_youtube.csv")
 				sh "pkill -u \$(whoami) GeckoMain"
+				stop_perfetto()
 			}
 		}
 		stage('Sysbench Youtube 2 Browsers') {
 			steps {
+				start_perfetto("sysbench_youtube_2_browsers")
 				sh "firefox -headless 'https://www.youtube.com/watch?v=vAuOfRRmtSc&t=0s' &"
 				sh "chromium-browser --headless --autoplay-policy=no-user-gesture-required --remote-debugging-port=9223 'https://www.youtube.com/watch?v=vAuOfRRmtSc&t=0s' &"
 				sysbench(env.ITERATIONS, env.NUMTHREADS, env.DELAY, "sysbench_youtube_2_browsers.csv")
 				sh "pkill -u \$(whoami) GeckoMain"
 				sh "pkill -u \$(whoami) chromium-browse"
+				stop_perfetto()
 			}
 		}
 		stage('Generate Result') {
@@ -38,6 +44,7 @@ pipeline {
 				archiveArtifacts artifacts: '*.csv', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
 				archiveArtifacts artifacts: '*.txt', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
 			}
 		}
 	}
