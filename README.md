@@ -10,6 +10,9 @@
 
 ## Common tools on all type of DUTs
 
+- uclampset
+- sysbench
+
 ### uclampset
 
 We need uclampset which is part of util-linux 2.37.2
@@ -27,6 +30,16 @@ cd util-linux
 ./configure
 sudo cp uclampset /usr/local/bin/
 ```
+
+### sysbench
+
+On Linux systems you can just install it
+
+`sudo apt install sysbench`
+
+On Android, you need to follow best way to get binaries for your arch
+
+[https://github.com/akopytov/sysbench](https://github.com/akopytov/sysbench)
 
 ## On Android DUT
 
