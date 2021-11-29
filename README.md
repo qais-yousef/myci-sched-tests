@@ -28,6 +28,7 @@ git clone https://github.com/util-linux/util-linux.git
 cd util-linux
 ./autogen.sh
 ./configure
+make uclampset
 sudo cp uclampset /usr/local/bin/
 ```
 
