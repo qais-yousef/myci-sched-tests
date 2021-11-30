@@ -10,6 +10,7 @@ pipeline {
 		stage('Checkout') {
 			steps {
 				checkout_kernel_tree()
+				clobber_kernel_tree()
 			}
 		}
 		stage('Compile') {
