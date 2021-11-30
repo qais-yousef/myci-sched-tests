@@ -1,0 +1,36 @@
+pipeline {
+	agent { label params.NODE }
+
+	stages {
+		stage('Verify') {
+			steps {
+				verify_linux()
+			}
+		}
+		stage('Bonnie++') {
+			steps {
+				start_perfetto("bonnie++")
+				run_bonnie()
+				stop_perfetto()
+			}
+		}
+		stage('Generate Result') {
+			steps {
+				plot_frequency()
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.txt', followSymlinks: false
+				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs()
+		}
+	}
+}
+
