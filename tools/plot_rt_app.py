@@ -23,6 +23,8 @@ for file in sorted(os.listdir()):
         trace_freq = trace.query(query_freq)
         trace_util = trace.query(query_util)
         trace_runtime = trace.query(query_runtime)
+        trace.close()
+
         df_freq = trace_freq.as_pandas_dataframe()
         df_util = trace_util.as_pandas_dataframe()
         df_runtime = trace_runtime.as_pandas_dataframe()
