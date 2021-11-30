@@ -1,11 +1,11 @@
 duration_ms: 3600000
 
 buffers: {
-    size_kb: 89600
+    size_kb: 896000
     fill_policy: DISCARD
 }
 buffers: {
-    size_kb: 12800
+    size_kb: 128000
     fill_policy: DISCARD
 }
 data_sources: {
