@@ -1,0 +1,41 @@
+pipeline {
+	agent { label params.NODE }
+
+	stages {
+		stage('Verify') {
+			steps {
+				verify_linux()
+			}
+		}
+		stage('Checkout') {
+			steps {
+				checkout_kernel_tree()
+			}
+		}
+		stage('Compile') {
+			steps {
+				start_perfetto("kernel_compile_test")
+				compile_kernel_tree("v5.15", "kernel_compile_test.log")
+				stop_perfetto()
+			}
+		}
+		stage('Generate Result') {
+			steps {
+				plot_kernel_compile_test()
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.log', followSymlinks: false
+				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
+			}
+		}
+	}
+	post {
+		always {
+			clobber_kernel_tree()
+		}
+	}
+}
+
