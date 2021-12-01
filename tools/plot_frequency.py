@@ -22,6 +22,7 @@ for file in sorted(os.listdir()):
         try:
             df_freq.ts = df_freq.ts - df_freq.ts[0]
             df_freq.ts = df_freq.ts / 1000000000
+            df_freq['_ts'] = df_freq.ts
             df_freq.freq = df_freq.freq / 1000000
             df_freq.set_index('ts', inplace=True)
 
@@ -29,10 +30,12 @@ for file in sorted(os.listdir()):
             nr_freqs = len(df_freq.freq.unique())
 
             for cpu in range(nr_cpus):
+                df_freq_cpu = df_freq[df_freq.cpu == cpu]
                 plt.subplot(nr_cpus * 2 + 1, 1, cpu * 2 + 1)
-                df_freq[df_freq.cpu == cpu].freq.plot(title='CPU' + str(cpu) + ' frequency', alpha=0.75, drawstyle='steps-post', xlim=(df_freq.index[0], df_freq.index[-1]))
+                df_freq_cpu.freq.plot(title='CPU' + str(cpu) + ' frequency', alpha=0.75, drawstyle='steps-post', xlim=(df_freq.index[0], df_freq.index[-1]))
                 plt.subplot(nr_cpus * 2 + 1, 1, cpu * 2 + 2)
-                df_freq[df_freq.cpu == cpu].freq.hist(bins=nr_freqs, alpha=0.75)
+                df_freq_cpu['duration'] = -1 * df_freq_cpu._ts.diff(periods=-1)
+                df_freq_cpu.groupby('freq').duration.sum().plot.bar(title='Frequency residency', alpha=0.75)
         except:
             pass
 
