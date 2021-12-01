@@ -37,4 +37,4 @@ for file in sorted(os.listdir()):
             pass
 
         plt.tight_layout()
-        plt.savefig('result.png')
+        plt.savefig(file.replace('.perfetto-trace', '') + 'frequency.png')
