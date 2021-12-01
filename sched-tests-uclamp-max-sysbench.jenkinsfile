@@ -38,6 +38,7 @@ pipeline {
 		stage('Generate Result') {
 			steps {
 				plot_sysbench()
+				plot_frequency()
 			}
 		}
 		stage('Archive') {
