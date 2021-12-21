@@ -19,6 +19,24 @@
           <description>The DUT to run on. Must be Linux based DUT.</description>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>UCLAMP_MIN</name>
+          <description>Parameter to pass to uclampset -m ${UCLAMP_MIN}</description>
+          <defaultValue>0</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>UCLAMP_MAX</name>
+          <description>Parameter to pass to uclampset -M ${UCLAMP_MAX}</description>
+          <defaultValue>1024</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
+        <hudson.model.StringParameterDefinition>
+          <name>NUM_PARALLEL_JOBS</name>
+          <description>Parameter to pass to make -j ${NUM_PARALLEL_JOBS}</description>
+          <defaultValue>2</defaultValue>
+          <trim>false</trim>
+        </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
