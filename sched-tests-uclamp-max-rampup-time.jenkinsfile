@@ -14,22 +14,29 @@ pipeline {
 		}
 		stage('Max perf rampup time') {
 			steps {
+				start_perfetto("uclamp_rampup_time_max_perf")
 				uclamp_rampup_time(1024, 1024, "uclamp_rampup_time_max_perf.csv")
+				stop_perfetto()
 			}
 		}
 		stage('Min perf rampup time') {
 			steps {
+				start_perfetto("uclamp_rampup_time_min_perf")
 				uclamp_rampup_time(0, 0, "uclamp_rampup_time_min_perf.csv")
+				stop_perfetto()
 			}
 		}
 		stage('Normal rampup time') {
 			steps {
+				start_perfetto("uclamp_rampup_time_normal")
 				uclamp_rampup_time(0, 1024, "uclamp_rampup_time_normal.csv")
+				stop_perfetto()
 			}
 		}
 		stage('Generate Result') {
 			steps {
 				plot_rampup_time()
+				plot_rt_app()
 			}
 		}
 		stage('Archive') {
@@ -37,6 +44,7 @@ pipeline {
 				archiveArtifacts artifacts: '*.csv', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
 				archiveArtifacts artifacts: '*.txt', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
 			}
 		}
 	}
