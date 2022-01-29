@@ -13,6 +13,11 @@ pipeline {
 			}
 		}
 		stage('Max perf rampup time') {
+			when {
+				expression {
+					return env.MAX_PERF == 'true';
+				}
+			}
 			steps {
 				start_perfetto("uclamp_rampup_time_max_perf")
 				uclamp_rampup_time(1024, 1024, "uclamp_rampup_time_max_perf.csv")
@@ -20,6 +25,11 @@ pipeline {
 			}
 		}
 		stage('Min perf rampup time') {
+			when {
+				expression {
+					return env.MIN_PERF == 'true';
+				}
+			}
 			steps {
 				start_perfetto("uclamp_rampup_time_min_perf")
 				uclamp_rampup_time(0, 0, "uclamp_rampup_time_min_perf.csv")
@@ -27,6 +37,11 @@ pipeline {
 			}
 		}
 		stage('Normal rampup time') {
+			when {
+				expression {
+					return env.NORMAL_PERF == 'true';
+				}
+			}
 			steps {
 				start_perfetto("uclamp_rampup_time_normal")
 				uclamp_rampup_time(0, 1024, "uclamp_rampup_time_normal.csv")
