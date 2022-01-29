@@ -46,7 +46,8 @@ On Android, you need to follow best way to get binaries for your arch
 
 You need to install pcmark from Play store.
 
-You need to push `hackbench` binary into `/system/bin`.
+Workload-Automation framework should push hackbench binary to the device into
+temporary folder when you run the test.
 
 ## On Linux DUT
 
