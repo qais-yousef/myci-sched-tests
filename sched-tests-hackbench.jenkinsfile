@@ -6,6 +6,7 @@ pipeline {
 			steps {
 				verify_android()
 				connect()
+				android_wakeup_device()
 			}
 		}
 		stage('Prepare Agenda') {
@@ -43,8 +44,9 @@ pipeline {
 	}
 	post {
 		always {
-			cleanWs()
+			android_doze_device()
 			disconnect()
+			cleanWs()
 		}
 	}
 }
