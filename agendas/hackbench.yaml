@@ -11,7 +11,7 @@ config:
         device: DEVICE
         disable_selinux: true
         executables_directory: null
-        load_default_modules: true
+        load_default_modules: false
         logcat_poll_period: null
         model: null
         modules: null
