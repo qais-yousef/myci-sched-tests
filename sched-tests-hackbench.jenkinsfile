@@ -19,7 +19,9 @@ pipeline {
 		}
 		stage('Hackbench-WA') {
 			steps {
+				start_perfetto("hackbench")
 				run_wa("agendas/hackbench.yaml")
+				stop_perfetto()
 			}
 		}
 		stage('Generate Plots') {
@@ -39,6 +41,7 @@ pipeline {
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
 				archiveArtifacts artifacts: 'results.txt', followSymlinks: false
 				//archiveArtifacts artifacts: 'power.txt', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
 			}
 		}
 	}
