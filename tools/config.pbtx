@@ -19,90 +19,48 @@ data_sources: {
     config {
         name: "linux.ftrace"
         ftrace_config {
+            symbolize_ksyms: true
+            atrace_categories: "workq"
+            atrace_categories: "rs"
+            atrace_categories: "webview"
+            atrace_categories: "memory"
+            atrace_categories: "dalvik"
+            atrace_categories: "freq"
+            atrace_categories: "regulators"
+            atrace_categories: "network"
+            atrace_categories: "binder_driver"
+            atrace_categories: "hal"
+            atrace_categories: "view"
+            atrace_categories: "wm"
+            atrace_categories: "thermal"
+            atrace_categories: "power"
+            atrace_categories: "audio"
+            atrace_categories: "nnapi"
+            atrace_categories: "camera"
+            atrace_categories: "memreclaim"
+            atrace_categories: "res"
+            atrace_categories: "idle"
+            atrace_categories: "thermal_tj"
+            atrace_categories: "irq"
+            atrace_categories: "am"
+            atrace_categories: "sync"
+            atrace_categories: "input"
+            atrace_categories: "disk"
+            atrace_categories: "sched"
+            atrace_categories: "gfx"
+            atrace_apps: "*"
+            compact_sched: {
+              enabled: true
+            }
             buffer_size_kb: 16384
             drain_period_ms: 250
-
-            # Sched Events
-            ftrace_events: "sched_switch"
-            ftrace_events: "sched_process_exit"
-            ftrace_events: "sched_process_free"
-            ftrace_events: "sched_stat_runtime"
-            ftrace_events: "sched_pelt_se"
-            ftrace_events: "sched_pelt_cfs"
-            ftrace_events: "schedutil_cpu_util_clamp"
-            ftrace_events: "sched_process_exec"
-            ftrace_events: "sched_process_exit"
-            ftrace_events: "sched_process_fork"
-            ftrace_events: "sched_process_free"
-            ftrace_events: "sched_process_hang"
-            ftrace_events: "sched_process_wait"
-            ftrace_events: "sched_switch"
-            ftrace_events: "sched_wakeup_new"
-            ftrace_events: "sched_wakeup"
-            ftrace_events: "sched_waking"
-            ftrace_events: "task_newtask"
-            ftrace_events: "task_rename"
-            ftrace_events: "task/task_newtask"
-            ftrace_events: "task/task_rename"
-            ftrace_events: "suspend_resume"
-
-            # Power Events
-            ftrace_events: "cpu_frequency"
-            ftrace_events: "cpu_idle"
-
-            # Thermal Events
-            ftrace_events: "thermal_temperature"
-            ftrace_events: "cdev_update"
-
-            # SoftIRQs Events
-            ftrace_events: "softirq_entry"
-            ftrace_events: "softirq_exit"
-            ftrace_events: "softirq_raise"
-
-            # IRQ Events
-            ftrace_events: "irq_handler_entry"
-            ftrace_events: "irq_handler_exit"
-
-            # Regulator Events
-            ftrace_events: "regulator_disable_complete"
-            ftrace_events: "regulator_disable"
-            ftrace_events: "regulator_enable_complete"
-            ftrace_events: "regulator_enable_delay"
-            ftrace_events: "regulator_enable"
-            ftrace_events: "regulator_set_voltage_complete"
-            ftrace_events: "regulator_set_voltage"
-
-            # Workqueue Events
-            ftrace_events: "workqueue_activate_work"
-            ftrace_events: "workqueue_execute_end"
-            ftrace_events: "workqueue_execute_start"
-            ftrace_events: "workqueue_queue_work"
-
-            # Ftrace Events
-            ftrace_events: "print"
-            ftrace_events: "tracing_mark_write"
         }
     }
 }
 data_sources: {
-    config {
-        name: "linux.ftrace"
-        ftrace_config {
-            atrace_categories: "gfx"
-            atrace_categories: "view"
-            atrace_categories: "webview"
-            atrace_categories: "camera"
-            atrace_categories: "dalvik"
-            atrace_categories: "power"
-            atrace_categories: "irq"
-            atrace_categories: "audio"
-            atrace_categories: "network"
-            atrace_categories: "nnapi"
-            atrace_categories: "hal"
-            buffer_size_kb: 168  # 4 (page size) * 42
-            drain_period_ms: 42
-        }
-    }
+  config: {
+    name: "android.gpu.memory"
+  }
 }
 data_sources: {
     config {
