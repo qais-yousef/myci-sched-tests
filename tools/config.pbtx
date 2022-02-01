@@ -6,6 +6,15 @@ max_file_size_bytes: 1073741824
 
 # Drain buffer regularly
 write_into_file: true
+file_write_period_ms: 1000
+flush_period_ms: 30000
+
+# Magic config copied from what devices produce..
+enable_extra_guardrails: false
+notify_traceur: true
+incremental_state_config: {
+    clear_period_ms: 15000
+}
 
 buffers: {
     size_kb: 65536
