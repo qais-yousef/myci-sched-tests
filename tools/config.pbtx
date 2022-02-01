@@ -20,40 +20,40 @@ data_sources: {
         name: "linux.ftrace"
         ftrace_config {
             symbolize_ksyms: true
-            atrace_categories: "workq"
+            #atrace_categories: "workq"
             atrace_categories: "rs"
-            atrace_categories: "webview"
-            atrace_categories: "memory"
-            atrace_categories: "dalvik"
+            #atrace_categories: "webview"
+            #atrace_categories: "memory"
+            #atrace_categories: "dalvik"
             atrace_categories: "freq"
             atrace_categories: "regulators"
-            atrace_categories: "network"
-            atrace_categories: "binder_driver"
-            atrace_categories: "hal"
-            atrace_categories: "view"
-            atrace_categories: "wm"
+            #atrace_categories: "network"
+            #atrace_categories: "binder_driver"
+            #atrace_categories: "hal"
+            #atrace_categories: "view"
+            #atrace_categories: "wm"
             atrace_categories: "thermal"
             atrace_categories: "power"
-            atrace_categories: "audio"
-            atrace_categories: "nnapi"
-            atrace_categories: "camera"
-            atrace_categories: "memreclaim"
-            atrace_categories: "res"
+            #atrace_categories: "audio"
+            #atrace_categories: "nnapi"
+            #atrace_categories: "camera"
+            #atrace_categories: "memreclaim"
+            #atrace_categories: "res"
             atrace_categories: "idle"
             atrace_categories: "thermal_tj"
-            atrace_categories: "irq"
-            atrace_categories: "am"
+            #atrace_categories: "irq"
+            #atrace_categories: "am"
             atrace_categories: "sync"
-            atrace_categories: "input"
+            #atrace_categories: "input"
             atrace_categories: "disk"
             atrace_categories: "sched"
-            atrace_categories: "gfx"
+            #atrace_categories: "gfx"
             atrace_apps: "*"
             compact_sched: {
               enabled: true
             }
             buffer_size_kb: 16384
-            drain_period_ms: 250
+            drain_period_ms: 1000
         }
     }
 }
@@ -78,7 +78,7 @@ data_sources: {
     config {
         name: "linux.process_stats"
         process_stats_config {
-            scan_all_processes_on_start: true
+            proc_stats_poll_ms: 60000
         }
     }
 }
