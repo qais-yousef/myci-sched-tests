@@ -28,7 +28,16 @@ data_sources: {
     config {
         name: "linux.ftrace"
         ftrace_config {
+
+            ftrace_events: "sched/sched_stat_runtime"
+            ftrace_events: "sched/sched_pelt_se"
+            ftrace_events: "sched/sched_pelt_cfs"
+            ftrace_events: "sched/uclamp_util_se"
+            ftrace_events: "sched/uclamp_util_cfs"
+            ftrace_events: "sched/schedutil_cpu_util_clamp"
+
             symbolize_ksyms: true
+
             #atrace_categories: "workq"
             atrace_categories: "rs"
             #atrace_categories: "webview"
