@@ -85,6 +85,11 @@ data_sources: {
 }
 data_sources: {
     config {
+        name: "linux.sysfs_power"
+    }
+}
+data_sources: {
+    config {
         name: "linux.process_stats"
         process_stats_config {
             proc_stats_poll_ms: 60000
