@@ -13,102 +13,102 @@ flush_period_ms: 30000
 enable_extra_guardrails: false
 notify_traceur: true
 incremental_state_config: {
-    clear_period_ms: 15000
+	clear_period_ms: 15000
 }
 
 buffers: {
-    size_kb: 65536
-    fill_policy: RING_BUFFER
+	size_kb: 65536
+	fill_policy: RING_BUFFER
 }
 buffers: {
-    size_kb: 65536
-    fill_policy: RING_BUFFER
+	size_kb: 65536
+	fill_policy: RING_BUFFER
 }
 data_sources: {
-    config {
-        name: "linux.ftrace"
-        ftrace_config {
+	config {
+		name: "linux.ftrace"
+		ftrace_config {
 
-            ftrace_events: "sched/sched_stat_runtime"
-            ftrace_events: "sched/sched_pelt_se"
-            ftrace_events: "sched/sched_pelt_cfs"
-            ftrace_events: "sched/uclamp_util_se"
-            ftrace_events: "sched/uclamp_util_cfs"
-            ftrace_events: "sched/schedutil_cpu_util_clamp"
+			ftrace_events: "sched/sched_stat_runtime"
+			ftrace_events: "sched/sched_pelt_se"
+			ftrace_events: "sched/sched_pelt_cfs"
+			ftrace_events: "sched/uclamp_util_se"
+			ftrace_events: "sched/uclamp_util_cfs"
+			ftrace_events: "sched/schedutil_cpu_util_clamp"
 
-            symbolize_ksyms: true
+			symbolize_ksyms: true
 
-            #atrace_categories: "workq"
-            atrace_categories: "rs"
-            #atrace_categories: "webview"
-            #atrace_categories: "memory"
-            #atrace_categories: "dalvik"
-            atrace_categories: "freq"
-            atrace_categories: "regulators"
-            #atrace_categories: "network"
-            #atrace_categories: "binder_driver"
-            #atrace_categories: "hal"
-            #atrace_categories: "view"
-            #atrace_categories: "wm"
-            atrace_categories: "thermal"
-            atrace_categories: "power"
-            #atrace_categories: "audio"
-            #atrace_categories: "nnapi"
-            #atrace_categories: "camera"
-            #atrace_categories: "memreclaim"
-            #atrace_categories: "res"
-            atrace_categories: "idle"
-            atrace_categories: "thermal_tj"
-            #atrace_categories: "irq"
-            #atrace_categories: "am"
-            atrace_categories: "sync"
-            #atrace_categories: "input"
-            atrace_categories: "disk"
-            atrace_categories: "sched"
-            #atrace_categories: "gfx"
-            atrace_apps: "*"
-            compact_sched: {
-              enabled: true
-            }
-            buffer_size_kb: 16384
-            drain_period_ms: 1000
-        }
-    }
+			#atrace_categories: "workq"
+			atrace_categories: "rs"
+			#atrace_categories: "webview"
+			#atrace_categories: "memory"
+			#atrace_categories: "dalvik"
+			atrace_categories: "freq"
+			atrace_categories: "regulators"
+			#atrace_categories: "network"
+			#atrace_categories: "binder_driver"
+			#atrace_categories: "hal"
+			#atrace_categories: "view"
+			#atrace_categories: "wm"
+			atrace_categories: "thermal"
+			atrace_categories: "power"
+			#atrace_categories: "audio"
+			#atrace_categories: "nnapi"
+			#atrace_categories: "camera"
+			#atrace_categories: "memreclaim"
+			#atrace_categories: "res"
+			atrace_categories: "idle"
+			atrace_categories: "thermal_tj"
+			#atrace_categories: "irq"
+			#atrace_categories: "am"
+			atrace_categories: "sync"
+			#atrace_categories: "input"
+			atrace_categories: "disk"
+			atrace_categories: "sched"
+			#atrace_categories: "gfx"
+			atrace_apps: "*"
+			compact_sched: {
+				enabled: true
+			}
+			buffer_size_kb: 16384
+			drain_period_ms: 1000
+		}
+	}
 }
 data_sources: {
-  config: {
-    name: "android.gpu.memory"
-  }
+	config: {
+	name: "android.gpu.memory"
+	}
 }
 data_sources: {
-    config {
-        name: "android.power"
-        android_power_config {
-            battery_poll_ms: 250
-            battery_counters: BATTERY_COUNTER_CAPACITY_PERCENT
-            battery_counters: BATTERY_COUNTER_CHARGE
-            battery_counters: BATTERY_COUNTER_CURRENT
-            battery_counters: BATTERY_COUNTER_CURRENT_AVG
-            collect_power_rails: true
-            collect_energy_estimation_breakdown: true
-        }
-    }
+	config {
+		name: "android.power"
+		android_power_config {
+			battery_poll_ms: 250
+			battery_counters: BATTERY_COUNTER_CAPACITY_PERCENT
+			battery_counters: BATTERY_COUNTER_CHARGE
+			battery_counters: BATTERY_COUNTER_CURRENT
+			battery_counters: BATTERY_COUNTER_CURRENT_AVG
+			collect_power_rails: true
+			collect_energy_estimation_breakdown: true
+		}
+	}
 }
 data_sources: {
-    config {
-        name: "linux.sysfs_power"
-    }
+	config {
+		name: "linux.sysfs_power"
+	}
 }
 data_sources: {
-    config {
-        name: "linux.process_stats"
-        process_stats_config {
-            proc_stats_poll_ms: 60000
-        }
-    }
+	config {
+		name: "linux.process_stats"
+		process_stats_config {
+			proc_stats_poll_ms: 60000
+		}
+	}
 }
 data_sources {
-    config {
-        name: "android.surfaceflinger.frametimeline"
-    }
+	config {
+		name: "android.surfaceflinger.frametimeline"
+	}
 }
