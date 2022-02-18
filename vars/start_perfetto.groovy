@@ -1,4 +1,4 @@
-def call(name) {
+def call(name, config="config.pbtx") {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
 		if (env.IPADDRESS && env.PORT) {
@@ -11,7 +11,7 @@ def call(name) {
 				adb -s ${IPADDRESS}:${PORT} shell "mkdir -p /data/misc/perfetto-traces/myci/"
 				adb -s ${IPADDRESS}:${PORT} shell "rm -f /data/misc/perfetto-traces/myci/*.perfetto-trace"
 
-				cat ./tools/config.pbtx | adb -s ${IPADDRESS}:${PORT} shell \
+				cat ./tools/${config} | adb -s ${IPADDRESS}:${PORT} shell \
 					perfetto -d -c - --txt -o /data/misc/perfetto-traces/myci/${name}.perfetto-trace
 
 			"""
@@ -26,7 +26,7 @@ def call(name) {
 			sleep 3
 
 			touch ${name}.perfetto-trace
-			tracebox -o ${name}.perfetto-trace --txt -d -c ./tools/config.pbtx &> perfetto.pid
+			tracebox -o ${name}.perfetto-trace --txt -d -c ./tools/${config} &> perfetto.pid
 		"""
 		break
 	default:

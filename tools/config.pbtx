@@ -1,8 +1,8 @@
 # 24 Hrs
 duration_ms: 86400000
 
-# 1GiB
-max_file_size_bytes: 1073741824
+# 2GiB
+max_file_size_bytes: 2147483648
 
 # Drain buffer regularly
 write_into_file: true
