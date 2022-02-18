@@ -18,7 +18,7 @@ pipeline {
 		}
 		stage('PCMark-WA') {
 			steps {
-				start_perfetto("pcmark")
+				start_perfetto("pcmark", "config.pbtx.power")
 				run_wa("agendas/pcmark.yaml")
 				stop_perfetto()
 			}

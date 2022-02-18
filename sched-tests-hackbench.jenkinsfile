@@ -19,7 +19,7 @@ pipeline {
 		}
 		stage('Hackbench-WA') {
 			steps {
-				start_perfetto("hackbench")
+				start_perfetto("hackbench", "config.pbtx.power")
 				run_wa("agendas/hackbench.yaml")
 				stop_perfetto()
 			}
