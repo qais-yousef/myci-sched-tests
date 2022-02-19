@@ -13,13 +13,22 @@ df_all_ratios = pd.DataFrame()
 
 ticks=[x * 5 for x in range(0, 21)]
 
+plt.figure(figsize=(16,32))
+num_rows=4
+plot_row=1
+
+for file in sorted(os.listdir()):
+    if file.endswith(".csv"):
+        num_rows += 1
+
 for file in sorted(os.listdir()):
     if file.endswith(".csv"):
         df = pd.read_csv(file)
         df_all_run[file] = df['run']
         df_all_duty[file] = df['run'] * 100.0 / df['period']
-        df_all_duty[file].plot.hist(figsize=(16,8), bins=32, xticks=ticks, alpha=0.75, title=file + ' Duty Hist').get_figure().savefig(file.replace('.csv', '') + "_result_duty_hist.png")
-        plt.close()
+        plt.subplot(num_rows, 1, plot_row)
+        df_all_duty[file].plot.hist(ax=plt.gca(), bins=32, xticks=ticks, alpha=0.75, title=file + ' Duty Hist')
+        plot_row += 1
 
 print("Runtime:")
 print(tabulate(df_all_run.describe(), headers='keys', tablefmt='psql'))
@@ -63,9 +72,19 @@ except:
 # Generate all plots
 #
 try:
-    df_all_run.plot(figsize=(16,8), style='o-', title='Runtime').get_figure().savefig("result_run.png")
-    df_all_duty.plot(figsize=(16,8), yticks=ticks, style='o-', title='Duty').get_figure().savefig("result_duty.png")
-    df_all_duty.plot.hist(figsize=(16,8), bins=32, xticks=ticks, alpha=0.5, title='Duty Hist').get_figure().savefig("result_duty_hist.png")
-    df_all_ratios.plot(figsize=(16,8), style='o-', title='Runtime Ratios').get_figure().savefig("result_run_ratios.png")
+    plt.subplot(num_rows, 1, plot_row)
+    df_all_run.plot(ax=plt.gca(), style='o-', title='Runtime')
+    plot_row += 1
+    plt.subplot(num_rows, 1, plot_row)
+    df_all_duty.plot(ax=plt.gca(), yticks=ticks, style='o-', title='Duty')
+    plot_row += 1
+    plt.subplot(num_rows, 1, plot_row)
+    df_all_duty.plot.hist(ax=plt.gca(), bins=32, xticks=ticks, alpha=0.5, title='Duty Hist')
+    plot_row += 1
+    plt.subplot(num_rows, 1, plot_row)
+    df_all_ratios.plot(ax=plt.gca(), style='o-', title='Runtime Ratios')
 except:
     pass
+
+plt.tight_layout()
+plt.savefig("rampup_time_results.png")
