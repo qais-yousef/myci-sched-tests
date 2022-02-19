@@ -13,22 +13,15 @@ df_all_ratios = pd.DataFrame()
 
 ticks=[x * 5 for x in range(0, 21)]
 
-plt.figure(figsize=(16,32))
+plt.figure(figsize=(16,16))
 num_rows=4
 plot_row=1
-
-for file in sorted(os.listdir()):
-    if file.endswith(".csv"):
-        num_rows += 1
 
 for file in sorted(os.listdir()):
     if file.endswith(".csv"):
         df = pd.read_csv(file)
         df_all_run[file] = df['run']
         df_all_duty[file] = df['run'] * 100.0 / df['period']
-        plt.subplot(num_rows, 1, plot_row)
-        df_all_duty[file].plot.hist(ax=plt.gca(), bins=32, xticks=ticks, alpha=0.75, title=file + ' Duty Hist')
-        plot_row += 1
 
 print("Runtime:")
 print(tabulate(df_all_run.describe(), headers='keys', tablefmt='psql'))
@@ -79,7 +72,9 @@ try:
     df_all_duty.plot(ax=plt.gca(), yticks=ticks, style='o-', title='Duty')
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
-    df_all_duty.plot.hist(ax=plt.gca(), bins=32, xticks=ticks, alpha=0.5, title='Duty Hist')
+    for file in sorted(os.listdir()):
+        if file.endswith(".csv"):
+            df_all_duty[file].plot.hist(ax=plt.gca(), legend=True, bins=32, xticks=ticks, alpha=0.5, title='Duty Hist')
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
     df_all_ratios.plot(ax=plt.gca(), style='o-', title='Runtime Ratios')
