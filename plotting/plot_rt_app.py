@@ -42,8 +42,8 @@ for file in sorted(os.listdir()):
             df_util.ts = df_util.ts / 1000000000
             df_util.set_index('ts', inplace=True)
 
-            df_util.columns = df_util.columns.str.replace('EXTRACT_ARG\(arg_set_id, \'', '')
-            df_util.columns = df_util.columns.str.replace('\'\)', '')
+            df_util.columns = df_util.columns.str.replace('EXTRACT_ARG\(arg_set_id, \'', '', regex=True)
+            df_util.columns = df_util.columns.str.replace('\'\)', '', regex=True)
             df_util = df_util[df_util.comm.str.contains('thread0')]
 
             plt.subplot(6, 1, 3)
@@ -70,8 +70,8 @@ for file in sorted(os.listdir()):
             df_runtime.ts = df_runtime.ts / 1000000000
             df_runtime.set_index('ts', inplace=True)
 
-            df_runtime.columns = df_runtime.columns.str.replace('EXTRACT_ARG\(arg_set_id, \'', '')
-            df_runtime.columns = df_runtime.columns.str.replace('\'\)', '')
+            df_runtime.columns = df_runtime.columns.str.replace('EXTRACT_ARG\(arg_set_id, \'', '', regex=True)
+            df_runtime.columns = df_runtime.columns.str.replace('\'\)', '', regex=True)
             df_runtime = df_runtime[df_runtime.comm.str.contains('thread0')]
 
             df_runtime.runtime = df_runtime.runtime / 1000000
