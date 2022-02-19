@@ -40,11 +40,14 @@ def plot(trace, start_row=1, num_cols=1):
                 df_freq_cpu = df_freq[df_freq.cpu == cpu].copy()
                 df_freq_cpu['duration'] = -1 * df_freq_cpu._ts.diff(periods=-1)
 
+                total_duration = df_freq_cpu.duration.sum()
+                df_duration =  df_freq_cpu.groupby('freq').duration.sum() * 100 / total_duration
+
                 plt.subplot(nr_cpus * 2, num_cols, start_row)
                 df_freq_cpu.freq.plot(title='CPU' + str(cpu) + ' frequency', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_freq.index[0], df_freq.index[-1]))
 
                 plt.subplot(nr_cpus * 2, num_cols, start_row + 1)
-                df_freq_cpu.groupby('freq').duration.sum().plot.bar(title='Frequency residency', alpha=0.75)
+                df_duration.plot.bar(title='Frequency residency %', alpha=0.75)
 
                 start_row += 2
         except:
