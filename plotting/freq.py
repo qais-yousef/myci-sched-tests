@@ -10,7 +10,7 @@ def init(trace):
         global trace_freq
         trace_freq = trace.query(query)
 
-def plot(start_row=1, num_cols=1):
+def plot(num_rows=0, row_pos=1, cpus=[]):
 
         df_freq = trace_freq.as_pandas_dataframe()
 
@@ -36,21 +36,31 @@ def plot(start_row=1, num_cols=1):
 
             nr_cpus = len(clusters)
             for cpu in clusters:
+                if len(cpus):
+                    if cpu not in cpus:
+                        continue
+
                 df_freq_cpu = df_freq[df_freq.cpu == cpu].copy()
                 df_freq_cpu['duration'] = -1 * df_freq_cpu._ts.diff(periods=-1)
 
                 total_duration = df_freq_cpu.duration.sum()
                 df_duration =  df_freq_cpu.groupby('freq').duration.sum() * 100 / total_duration
 
-                plt.subplot(nr_cpus * 2, num_cols, start_row)
+                if not num_rows:
+                    num_rows = nr_cpus * 2
+
+                plt.subplot(num_rows, 1, row_pos)
+                row_pos += 1
                 df_freq_cpu.freq.plot(title='CPU' + str(cpu) + ' frequency', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_freq.index[0], df_freq.index[-1]))
 
-                plt.subplot(nr_cpus * 2, num_cols, start_row + 1)
+                plt.subplot(num_rows, 1, row_pos)
+                row_pos += 1
                 ax = df_duration.plot.bar(title='Frequency residency %', alpha=0.75)
                 ax.bar_label(ax.containers[0])
-
-                start_row += 2
         except:
             # Most likely the trace has no freq info
             # TODO: Better detect this
+            print("Error processing freq.plot()")
             pass
+
+        return row_pos
