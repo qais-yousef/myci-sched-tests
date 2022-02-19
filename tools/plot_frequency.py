@@ -47,7 +47,8 @@ def plot(trace, start_row=1, num_cols=1):
                 df_freq_cpu.freq.plot(title='CPU' + str(cpu) + ' frequency', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_freq.index[0], df_freq.index[-1]))
 
                 plt.subplot(nr_cpus * 2, num_cols, start_row + 1)
-                df_duration.plot.bar(title='Frequency residency %', alpha=0.75)
+                ax = df_duration.plot.bar(title='Frequency residency %', alpha=0.75)
+                ax.bar_label(ax.containers[0])
 
                 start_row += 2
         except:
