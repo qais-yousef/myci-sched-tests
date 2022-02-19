@@ -3,13 +3,13 @@ import pandas as pd
 from tabulate import tabulate
 from perfetto.trace_processor import TraceProcessor as tp
 import freq
+import util
 import os
 
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-query_util = "select ts, EXTRACT_ARG(arg_set_id, 'comm'), EXTRACT_ARG(arg_set_id, 'util') from raw where name = 'sched_pelt_se'"
 query_runtime = "select ts, EXTRACT_ARG(arg_set_id, 'comm'), EXTRACT_ARG(arg_set_id, 'runtime'), EXTRACT_ARG(arg_set_id, 'vruntime') from raw where name = 'sched_stat_runtime'"
 
 num_rows=7
@@ -23,11 +23,10 @@ for file in sorted(os.listdir()):
 
         trace = tp(file_path=file + '.perfetto-trace')
         freq.init(trace)
-        trace_util = trace.query(query_util)
+        util.init(trace)
         trace_runtime = trace.query(query_runtime)
         trace.close()
 
-        df_util = trace_util.as_pandas_dataframe()
         df_runtime = trace_runtime.as_pandas_dataframe()
 
         plt.figure(figsize=(16,16))
@@ -38,23 +37,7 @@ for file in sorted(os.listdir()):
         df_result.slack.plot(ylim=(0, 20000), style='o-', title='slack', xlim=(df_result.index[0], df_result.index[-1]))
 
         row_pos = freq.plot(num_rows=num_rows, row_pos=row_pos, cpus=[0])
-
-        try:
-            df_util.ts = df_util.ts - df_util.ts[0]
-            df_util.ts = df_util.ts / 1000000000
-            df_util.set_index('ts', inplace=True)
-
-            df_util.columns = df_util.columns.str.replace('EXTRACT_ARG\(arg_set_id, \'', '', regex=True)
-            df_util.columns = df_util.columns.str.replace('\'\)', '', regex=True)
-            df_util = df_util[df_util.comm.str.contains('thread0')]
-
-            plt.subplot(num_rows, 1, row_pos)
-            row_pos += 1
-            df_util.groupby('comm').util.plot(title='util', alpha=0.75, xlim=(df_util.index[0], df_util.index[-1]))
-            plt.axhline(y=100, color='r', linestyle='-')
-        except:
-            print("Error plotting util")
-            pass
+        row_pos = util.plot(num_rows=num_rows, row_pos=row_pos, threads=['thread0'])
 
         plt.subplot(num_rows, 2, row_pos * 2 - 1)
         df_result.slack.plot.hist(bins=100, alpha=1, title='slack hist')
