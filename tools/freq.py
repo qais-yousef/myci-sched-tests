@@ -5,9 +5,13 @@ import matplotlib.pyplot as plt
 
 query = "select ts, cpu, value as freq from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpufreq'"
 
-def plot(trace, start_row=1, num_cols=1):
+def init(trace):
 
+        global trace_freq
         trace_freq = trace.query(query)
+
+def plot(start_row=1, num_cols=1):
+
         df_freq = trace_freq.as_pandas_dataframe()
 
         try:

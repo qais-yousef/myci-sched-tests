@@ -10,9 +10,10 @@ import matplotlib.pyplot as plt
 for file in sorted(os.listdir()):
     if file.endswith(".perfetto-trace"):
         trace = tp(file_path=file)
-        plt.figure(figsize=(16,16))
-        freq.plot(trace)
+        freq.init(trace)
         trace.close()
 
+        plt.figure(figsize=(16,16))
+        freq.plot()
         plt.tight_layout()
         plt.savefig(file.replace('.perfetto-trace', '') + '_frequency.png')
