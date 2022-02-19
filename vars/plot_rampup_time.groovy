@@ -1,5 +1,5 @@
 def call() {
 	sh """
-		plotting/plot_rampup_time.py > results.txt
+		plotting/plot_rampup_time.py
 	"""
 }
