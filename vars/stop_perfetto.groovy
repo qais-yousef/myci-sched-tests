@@ -46,7 +46,7 @@ def call() {
 		break
 	case "linux":
 		sh """
-			kill -TERM `cat perfetto.pid`
+			kill -TERM `cat perfetto.pid` || true
 		"""
 		break
 	default:
