@@ -1,5 +1,5 @@
 def call() {
 	sh """
-		tools/plot_frequency.py
+		plotting/plot_frequency.py
 	"""
 }
