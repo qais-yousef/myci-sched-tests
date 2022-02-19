@@ -10,6 +10,10 @@ def init(trace):
         global trace_freq
         trace_freq = trace.query(query)
 
+def nr_cpus():
+        df_freq = trace_freq.as_pandas_dataframe()
+        return len(df_freq.cpu.unique())
+
 def plot(num_rows=0, row_pos=1, cpus=[]):
 
         df_freq = trace_freq.as_pandas_dataframe()
