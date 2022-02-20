@@ -5,6 +5,7 @@ from perfetto.trace_processor import TraceProcessor as tp
 import freq
 import util
 import runtime
+import table
 import os
 
 import matplotlib
@@ -12,14 +13,12 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-num_rows=7
+num_rows=8
 
 for file in sorted(os.listdir()):
     if file.endswith(".csv"):
         file = file.replace('.csv', '')
         df_result = pd.read_csv(file + '.csv')
-
-        # print(tabulate(df_result.describe(), headers='keys', tablefmt='psql'))
 
         trace = tp(file_path=file + '.perfetto-trace')
         freq.init(trace)
@@ -45,6 +44,8 @@ for file in sorted(os.listdir()):
         row_pos += 1
 
         row_pos = runtime.plot(num_rows=num_rows, row_pos=row_pos, threads=['thread0'])
+
+        row_pos = table.subplot(df_result, num_rows=num_rows, row_pos=row_pos)
 
         plt.tight_layout()
         plt.savefig(file + '.png')
