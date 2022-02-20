@@ -10,12 +10,20 @@ workload = sys.argv[2]
 
 df = pd.read_csv("wa_output/results.csv")
 
-metrics = df.metric.unique()
+num_args = len(sys.argv)
+if num_args > 3:
+    metrics = []
+    for idx in range(3, num_args):
+        metrics.append(sys.argv[idx])
+else:
+    metrics = df.metric.unique()
+
 num_rows = len(metrics)
 row_pos = 1
 
 plt.figure(figsize=(16,32))
 
+print("Plotting Merics: {}".format(metrics))
 for metric in metrics:
     df_metric = df[df.metric == metric]
     plt.subplot(num_rows, 1, row_pos)
