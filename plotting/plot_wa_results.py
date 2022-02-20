@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import glob
 import sys
 import table
+import text
 
 target = sys.argv[1]
 workload = sys.argv[2]
@@ -26,12 +27,20 @@ plt.figure(figsize=(16,32))
 print("Plotting Merics: {}".format(metrics))
 for metric in metrics:
     df_metric = df[df.metric == metric]
+
     plt.subplot(num_rows, 1, row_pos)
     row_pos += 1
-    plt.stem(df_metric.iteration, df_metric.value, label=metric)
-    table.plot(df_metric, columns=['value'])
-    # plt.gca().legend(loc='upper right')
+
     plt.gca().set_title(metric)
+    plt.bar(df_metric.iteration, df_metric.value)
+    plt.gca().bar_label(plt.gca().containers[0])
+
+    mean = df_metric.value.mean()
+    b, t = plt.gca().get_ylim()
+    plt.axhline(y=mean, color='r', linestyle='-')
+    text.plot(0.1, mean/t, 'Mean = {:,.2f}'.format(mean))
+
+    table.plot(df_metric, columns=['value'])
 
 plt.tight_layout()
 plt.savefig("{}_{}_results.png".format(target, workload))
