@@ -2,6 +2,7 @@
 import pandas as pd
 import os
 import table
+import text
 
 import matplotlib
 matplotlib.use('Agg')
@@ -14,8 +15,16 @@ for file in sorted(os.listdir()):
         df = pd.read_csv(file)
         df_all[file] = df['events_per_second']
 
-plt.figure(figsize=(16,8))
-df_all.plot(style='o-')
+plt.figure(figsize=(16,16))
+df_all.plot.bar()
+b, t = plt.gca().get_ylim()
+i = 0
+color = ['b', 'orange', 'g']
+for column in df_all.columns:
+    mean = df_all[column].mean()
+    plt.axhline(y=mean, color=color[i], linestyle='-')
+    text.plot(0.1, mean/t, 'Mean = {:,.2f}'.format(mean))
+    i += 1
 table.plot(df_all)
 plt.tight_layout()
 plt.savefig("sysbench_result.png")
