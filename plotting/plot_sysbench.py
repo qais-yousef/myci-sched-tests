@@ -2,9 +2,11 @@
 import pandas as pd
 from tabulate import tabulate
 import os
+import table
 
 import matplotlib
 matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 df_all = pd.DataFrame()
 
@@ -13,6 +15,8 @@ for file in sorted(os.listdir()):
         df = pd.read_csv(file)
         df_all[file] = df['events_per_second']
 
-print(tabulate(df_all.describe(), headers='keys', tablefmt='psql'))
-
-df_all.plot(figsize=(16,8), style='o-').get_figure().savefig("result.png")
+plt.figure(figsize=(16,8))
+df_all.plot(style='o-')
+table.plot(df_all)
+plt.tight_layout()
+plt.savefig("sysbench_result.png")
