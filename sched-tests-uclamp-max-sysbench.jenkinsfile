@@ -45,7 +45,6 @@ pipeline {
 			steps {
 				archiveArtifacts artifacts: '*.csv', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
-				archiveArtifacts artifacts: '*.txt', followSymlinks: false
 				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
 			}
 		}

@@ -1,5 +1,5 @@
 def call() {
 	sh """
-		plotting/plot_rt_app.py > results.txt
+		plotting/plot_rt_app.py
 	"""
 }

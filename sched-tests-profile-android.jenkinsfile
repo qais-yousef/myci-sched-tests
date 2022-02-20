@@ -37,8 +37,7 @@ pipeline {
 			steps {
 				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
-				archiveArtifacts artifacts: 'results.txt', followSymlinks: false
-				archiveArtifacts artifacts: 'power.txt', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
 			}
 		}
 	}
