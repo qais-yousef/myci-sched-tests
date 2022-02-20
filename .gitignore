@@ -2,3 +2,4 @@ jobs/*/builds/*
 jobs/*/workspace*/*
 jobs/*/nextBuildNumber
 !jobs/
+__pycache__
