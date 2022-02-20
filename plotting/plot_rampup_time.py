@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 import pandas as pd
 from tabulate import tabulate
+import table
+import text
 import os
 
 import matplotlib
@@ -34,20 +36,6 @@ for col in df_all_run:
             continue
         df_all_ratios[row + '/' + col] = df_all_run[row] / df_all_run[col]
 
-
-#
-# Helper functions to print tables and text
-#
-def plot_table(df):
-    df_desc = df.describe().applymap('{:,.2f}'.format)
-    plt.table(cellText=df_desc.values,
-              rowLabels=df_desc.index, rowLoc='center',
-              colLabels=df_desc.columns, cellLoc='center',
-              bbox=[0, -0.4, 1, 0.3])
-
-def plot_text(x, y, text):
-    plt.text(x, y, text, ha='left', va='top', transform=plt.gca().transAxes)
-
 #
 # Print ratio of min & max freqs
 #
@@ -59,9 +47,9 @@ def print_ratios():
             for x, y in zip(max, min):
                 x = float(x.strip())
                 y = float(y.strip())
-                plot_text(0.01, 0.95, "Freq Ratio:")
-                plot_text(0.01, 0.90, "max/min = {:,.2f}".format(x/y))
-                plot_text(0.01, 0.85, "min/max = {:,.2f}".format(y/x))
+                text.plot(0.01, 0.95, "Freq Ratio:")
+                text.plot(0.01, 0.90, "max/min = {:,.2f}".format(x/y))
+                text.plot(0.01, 0.85, "min/max = {:,.2f}".format(y/x))
     except:
         pass
 
@@ -71,7 +59,7 @@ def print_ratios():
 try:
     plt.subplot(num_rows, 1, plot_row)
     df_all_run.plot(ax=plt.gca(), style='o-', title='Runtime')
-    plot_table(df_all_run)
+    table.plot(df_all_run)
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
     df_all_duty.plot(ax=plt.gca(), yticks=ticks, style='o-', title='Duty')
@@ -80,11 +68,11 @@ try:
     for file in sorted(os.listdir()):
         if file.endswith(".csv"):
             df_all_duty[file].plot.hist(ax=plt.gca(), legend=True, bins=32, xticks=ticks, alpha=0.5, title='Duty Hist')
-    plot_table(df_all_duty)
+    table.plot(df_all_duty)
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
     df_all_ratios.plot(ax=plt.gca(), style='o-', title='Runtime Ratios')
-    plot_table(df_all_ratios)
+    table.plot(df_all_ratios)
     print_ratios()
 except:
     pass
