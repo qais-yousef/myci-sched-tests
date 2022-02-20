@@ -5,7 +5,6 @@
 `pip3 install pandas`
 `pip3 install matplotlib`
 `pip3 install wlauto`
-`pip3 install tabulate`
 `pip3 install perfetto`
 
 ## Common tools on all type of DUTs

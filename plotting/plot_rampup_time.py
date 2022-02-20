@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import pandas as pd
-from tabulate import tabulate
 import table
 import text
 import os
