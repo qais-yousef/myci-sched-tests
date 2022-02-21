@@ -59,8 +59,9 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                ax = df_duration.plot.bar(title='Frequency residency %', alpha=0.75)
-                ax.bar_label(ax.containers[0])
+                if not df_duration.empty:
+                    ax = df_duration.plot.bar(title='Frequency residency %', alpha=0.75)
+                    ax.bar_label(ax.containers[0])
         except:
             # Most likely the trace has no freq info
             # TODO: Better detect this
