@@ -8,15 +8,16 @@ query = "select ts, cpu, value as freq from counter as c left join cpu_counter_t
 def init(trace):
 
         global trace_freq
+        global df_freq
+
         trace_freq = trace.query(query)
+        df_freq = trace_freq.as_pandas_dataframe()
 
 def nr_cpus():
-        df_freq = trace_freq.as_pandas_dataframe()
+
         return len(df_freq.cpu.unique())
 
 def plot(num_rows=0, row_pos=1, cpus=[]):
-
-        df_freq = trace_freq.as_pandas_dataframe()
 
         try:
             df_freq.ts = df_freq.ts - df_freq.ts[0]
