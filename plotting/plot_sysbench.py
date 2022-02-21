@@ -16,7 +16,7 @@ for file in sorted(os.listdir()):
         df_all[file] = df['events_per_second']
 
 plt.figure(figsize=(16,16))
-df_all.plot.bar()
+df_all.plot.bar(ax=plt.gca())
 b, t = plt.gca().get_ylim()
 i = 0
 color = ['b', 'orange', 'g']
