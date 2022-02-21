@@ -15,7 +15,7 @@ pipeline {
 		}
 		stage('Compile') {
 			steps {
-				start_perfetto("kernel_compile_test")
+				start_perfetto("kernel_compile_test", "config.pbtx.linux")
 				compile_kernel_tree("v5.15", "kernel_compile_test.log", env.UCLAMP_MIN, env.UCLAMP_MAX, env.NUM_PARALLEL_JOBS)
 				stop_perfetto()
 			}
