@@ -1,11 +1,19 @@
 #!/usr/bin/env python
 import pandas as pd
 import matplotlib.pyplot as plt
+from perfetto.trace_processor import TraceProcessor as tp
 import glob
 import sys
+import freq
+import idle
+import power
 import table
 import text
+import os
 
+#
+# Init wa stuff
+#
 target = sys.argv[1]
 workload = sys.argv[2]
 
@@ -19,11 +27,30 @@ if num_args > 3:
 else:
     metrics = df.metric.unique()
 
-num_rows = len(metrics)
+#
+# Init perfetto traces stuff
+#
+for file in sorted(os.listdir()):
+    if file.endswith(".perfetto-trace"):
+        trace = tp(file_path=file)
+        freq.init(trace)
+        idle.init(trace)
+        power.init(trace)
+        trace.close()
+        break
+
+#
+# Initialize plotting stuff
+#
+plt.figure(figsize=(16,64))
+
+nr_cpus = freq.nr_cpus()
+num_rows = len(metrics) + nr_cpus * 2 + nr_cpus + 2
 row_pos = 1
 
-plt.figure(figsize=(16,32))
-
+#
+# Plot wa results
+#
 print("Plotting Merics: {}".format(metrics))
 for metric in metrics:
     df_metric = df[df.metric == metric]
@@ -41,6 +68,13 @@ for metric in metrics:
     text.plot(0.1, mean/t, 'Mean = {:,.2f}'.format(mean))
 
     table.plot(df_metric, columns=['value'])
+
+#
+# Plot perfetto stuff
+#
+row_pos = freq.plot(num_rows=num_rows, row_pos=row_pos)
+row_pos = idle.plot(num_rows=num_rows, row_pos=row_pos)
+row_pos = power.plot(num_rows=num_rows, row_pos=row_pos)
 
 plt.tight_layout()
 plt.savefig("{}_{}_results.png".format(target, workload))
