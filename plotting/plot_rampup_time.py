@@ -49,7 +49,8 @@ def print_ratios():
                 text.plot(0.01, 0.95, "Freq Ratio:")
                 text.plot(0.01, 0.90, "max/min = {:,.2f}".format(x/y))
                 text.plot(0.01, 0.85, "min/max = {:,.2f}".format(y/x))
-    except:
+    except Exception as e:
+        print("Error: Failed to plot min/max ratios:", e)
         pass
 
 #
@@ -73,7 +74,8 @@ try:
     df_all_ratios.plot(ax=plt.gca(), style='o-', title='Runtime Ratios')
     table.plot(df_all_ratios)
     print_ratios()
-except:
+except Exception as e:
+    print("Error: Failed to generate all plots:", e)
     pass
 
 plt.tight_layout()

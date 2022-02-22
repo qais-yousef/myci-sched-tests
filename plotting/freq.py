@@ -63,10 +63,10 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
                 if not df_duration.empty:
                     ax = df_duration.plot.bar(title='CPU' + str(cpu) + ' Frequency residency %', alpha=0.75)
                     ax.bar_label(ax.containers[0])
-        except:
+        except Exception as e:
             # Most likely the trace has no freq info
             # TODO: Better detect this
-            print("Error processing freq.plot()")
+            print("Error processing freq.plot():", e)
             pass
 
         return row_pos

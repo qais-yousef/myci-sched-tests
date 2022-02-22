@@ -38,10 +38,10 @@ def plot(num_rows=2, row_pos=1):
             text.plot(0.01, 0.99, "Sum: {:,.2f}W".format(df_power.power.sum()/1000))
             text.plot(0.01, 0.97, "Mean: {:,.2f}mW".format(df_power.power.mean()))
 
-        except:
+        except Exception as e:
             # Most likely the trace has no power info
             # TODO: Better detect this
-            print("Error processing power.plot()")
+            print("Error processing power.plot():", e)
             pass
 
         return row_pos

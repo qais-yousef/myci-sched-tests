@@ -32,10 +32,10 @@ def plot(num_rows=0, row_pos=1, threads=[]):
                 row_pos += 1
                 df_util.groupby('comm').util.plot(title=thread + ' util', alpha=0.75, xlim=(df_util.index[0], df_util.index[-1]))
                 plt.axhline(y=100, color='r', linestyle='-')
-        except:
+        except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
-            print("Error processing util.plot()")
+            print("Error processing util.plot():", e)
             pass
 
         return row_pos

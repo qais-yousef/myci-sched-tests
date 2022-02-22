@@ -37,10 +37,10 @@ def plot(num_rows=0, row_pos=1, threads=[]):
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 df_runtime.groupby('comm').vruntime.plot(title='vruntime (ms)', alpha=0.75, xlim=(df_runtime.index[0], df_runtime.index[-1]))
-        except:
+        except Exception as e:
             # Most likely the trace has no runtime info
             # TODO: Better detect this
-            print("Error processing runtime.plot()")
+            print("Error processing runtime.plot():", e)
             pass
 
         return row_pos
