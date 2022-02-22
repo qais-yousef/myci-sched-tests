@@ -14,7 +14,7 @@ pipeline {
 		}
 		stage('Sysbench Rampup Task') {
 			steps {
-				start_perfetto("sysbench_rampup_task")
+				start_perfetto("sysbench_rampup_task", "pelt runtime")
 				sysbench_rt_app("rampup-task.json", "sysbench_rampup_task.csv")
 				stop_perfetto()
 			}
