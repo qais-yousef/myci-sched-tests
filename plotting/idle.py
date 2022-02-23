@@ -53,7 +53,8 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
                 df_duration =  df_idle_cpu.groupby('idle').duration.sum() * 100 / total_duration
 
                 if not num_rows:
-                    num_rows = num_rows()
+                    func = globals()['num_rows']
+                    num_rows = func()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
