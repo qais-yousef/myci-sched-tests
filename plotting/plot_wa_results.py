@@ -44,7 +44,7 @@ for file in sorted(os.listdir()):
 num_rows = len(metrics) + freq.num_rows() + idle.num_rows() + power.num_rows()
 row_pos = 1
 
-plt.figure(figsize=(4*num_rows,4*num_rows))
+plt.figure(figsize=(1*num_rows,2*num_rows))
 
 #
 # Plot wa results
