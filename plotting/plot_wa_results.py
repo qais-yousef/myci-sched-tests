@@ -7,7 +7,6 @@ import sys
 import freq
 import idle
 import power
-import table
 import text
 import os
 
@@ -65,8 +64,6 @@ for metric in metrics:
     b, t = plt.gca().get_ylim()
     plt.axhline(y=mean, color='r', linestyle='-')
     text.plot(0.1, mean/t, 'Mean = {:,.2f}'.format(mean))
-
-    table.plot(df_metric, columns=['value'])
 
 #
 # Plot perfetto stuff
