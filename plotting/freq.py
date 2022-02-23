@@ -5,19 +5,49 @@ import matplotlib.pyplot as plt
 
 query = "select ts, cpu, value as freq from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpufreq'"
 
+df_freq = None
+clusters = None
+
 def init(trace):
 
         global trace_freq
-        global df_freq
-
         trace_freq = trace.query(query)
-        df_freq = trace_freq.as_pandas_dataframe()
 
-def nr_cpus():
+def find_clusters():
 
-        return len(df_freq.cpu.unique())
+        global clusters
+
+        if clusters:
+            return
+
+        nr_cpus = len(df_freq.cpu.unique())
+
+        clusters = [0]
+        df_freq_cpu = df_freq[df_freq.cpu == 0]
+        for cpu in range(nr_cpus):
+            df_freq_next_cpu = df_freq[df_freq.cpu == cpu]
+
+            if np.array_equal(df_freq_cpu.freq.values, df_freq_next_cpu.freq.values):
+                continue
+
+            df_freq_cpu = df_freq[df_freq.cpu == cpu]
+            clusters.append(cpu)
+
+def num_rows():
+
+        global df_freq
+        if df_freq is None:
+            df_freq = trace_freq.as_pandas_dataframe()
+
+        find_clusters()
+
+        return len(clusters) * 2
 
 def plot(num_rows=0, row_pos=1, cpus=[]):
+
+        global df_freq
+        if df_freq is None:
+            df_freq = trace_freq.as_pandas_dataframe()
 
         try:
             df_freq.ts = df_freq.ts - df_freq.ts[0]
@@ -26,20 +56,8 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
             df_freq.freq = df_freq.freq / 1000000
             df_freq.set_index('ts', inplace=True)
 
-            nr_cpus = len(df_freq.cpu.unique())
+            find_clusters()
 
-            clusters = [0]
-            df_freq_cpu = df_freq[df_freq.cpu == 0]
-            for cpu in range(nr_cpus):
-                df_freq_next_cpu = df_freq[df_freq.cpu == cpu]
-
-                if np.array_equal(df_freq_cpu.freq.values, df_freq_next_cpu.freq.values):
-                    continue
-
-                df_freq_cpu = df_freq[df_freq.cpu == cpu]
-                clusters.append(cpu)
-
-            nr_cpus = len(clusters)
             for cpu in clusters:
                 if len(cpus):
                     if cpu not in cpus:
@@ -52,7 +70,7 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
                 df_duration =  df_freq_cpu.groupby('freq').duration.sum() * 100 / total_duration
 
                 if not num_rows:
-                    num_rows = nr_cpus * 2
+                    num_rows = num_rows()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1

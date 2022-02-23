@@ -9,6 +9,11 @@ def init(trace):
         global trace_util
         trace_util = trace.query(query)
 
+def num_rows():
+
+        # User must multiple this with len(threads) passed to plot()
+        return 1
+
 def plot(num_rows=0, row_pos=1, threads=[]):
 
         df_util = trace_util.as_pandas_dataframe()

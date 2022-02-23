@@ -44,8 +44,7 @@ for file in sorted(os.listdir()):
 #
 plt.figure(figsize=(16,64))
 
-nr_cpus = freq.nr_cpus()
-num_rows = len(metrics) + nr_cpus * 2 + nr_cpus + 2
+num_rows = len(metrics) + freq.num_rows() + idle.num_rows() + power.num_rows()
 row_pos = 1
 
 #

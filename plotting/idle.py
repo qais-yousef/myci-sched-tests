@@ -5,15 +5,26 @@ import matplotlib.pyplot as plt
 
 query = "select ts, cpu, value as idle from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpuidle'"
 
+df_idle = None
+
 def init(trace):
 
         global trace_idle
-        global df_idle
-
         trace_idle = trace.query(query)
-        df_idle = trace_idle.as_pandas_dataframe()
+
+def num_rows():
+
+        global df_idle
+        if df_idle is None:
+            df_idle = trace_idle.as_pandas_dataframe()
+
+        return len(df_idle.cpu.unique())
 
 def plot(num_rows=0, row_pos=1, cpus=[]):
+
+        global df_idle
+        if df_idle is None:
+            df_idle = trace_idle.as_pandas_dataframe()
 
         try:
             df_idle.ts = df_idle.ts - df_idle.ts[0]
@@ -41,7 +52,7 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
                 df_duration =  df_idle_cpu.groupby('idle').duration.sum() * 100 / total_duration
 
                 if not num_rows:
-                    num_rows = nr_cpus
+                    num_rows = num_rows()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1

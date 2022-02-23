@@ -9,9 +9,11 @@ query = "select ts, value as current_ua from counter as c left join counter_trac
 def init(trace):
 
         global trace_power
-        global df_power
-
         trace_power = trace.query(query)
+
+def num_rows():
+
+        return 2
 
 def plot(num_rows=2, row_pos=1):
 
@@ -37,7 +39,6 @@ def plot(num_rows=2, row_pos=1):
             df_power.power.plot(title='Power (mW)', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_power.index[0], df_power.index[-1]))
             text.plot(0.01, 0.99, "Sum: {:,.2f}W".format(df_power.power.sum()/1000))
             text.plot(0.01, 0.97, "Mean: {:,.2f}mW".format(df_power.power.mean()))
-
         except Exception as e:
             # Most likely the trace has no power info
             # TODO: Better detect this

@@ -18,7 +18,7 @@ for file in sorted(os.listdir()):
         trace.close()
 
         plt.figure(figsize=(16,16))
-        num_rows = freq.nr_cpus() * 2 + 1
+        num_rows = freq.num_rows() + util.num_rows()
         row_pos = 1
 
         row_pos = util.plot(num_rows=num_rows, row_pos=row_pos, threads=['make'])
