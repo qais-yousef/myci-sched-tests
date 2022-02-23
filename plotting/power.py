@@ -31,14 +31,14 @@ def plot(num_rows=2, row_pos=1):
             plt.subplot(num_rows, 1, row_pos)
             row_pos += 1
             df_power.current_ma.plot(title='Current (mA)', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_power.index[0], df_power.index[-1]))
-            text.plot(0.01, 1.05, "Sum: {:,.2f}A".format(df_power.current_ma.sum()/1000))
-            text.plot(0.11, 1.05, "Mean: {:,.2f}mA".format(df_power.current_ma.mean()))
+            text.plot(0.01, 1.20, "Sum: {:,.2f}A".format(df_power.current_ma.sum()/1000))
+            text.plot(0.11, 1.20, "Mean: {:,.2f}mA".format(df_power.current_ma.mean()))
 
             plt.subplot(num_rows, 1, row_pos)
             row_pos += 1
             df_power.power.plot(title='Power (mW)', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_power.index[0], df_power.index[-1]))
-            text.plot(0.01, 1.05, "Sum: {:,.2f}W".format(df_power.power.sum()/1000))
-            text.plot(0.11, 1.05, "Mean: {:,.2f}mW".format(df_power.power.mean()))
+            text.plot(0.01, 1.20, "Sum: {:,.2f}W".format(df_power.power.sum()/1000))
+            text.plot(0.11, 1.20, "Mean: {:,.2f}mW".format(df_power.power.mean()))
         except Exception as e:
             # Most likely the trace has no power info
             # TODO: Better detect this

@@ -61,7 +61,7 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
                 if not df_duration.empty:
                     ax = df_duration.plot.bar(title='CPU{}'.format(cpu) + ' Idle residency %', alpha=0.75)
                     ax.bar_label(ax.containers[0])
-                    text.plot(0.01, 1.05, "0 is NOT idle (IDLE_EXIT)")
+                    text.plot(0.01, 1.20, "0 is NOT idle (IDLE_EXIT)")
         except Exception as e:
             # Most likely the trace has no idle info
             # TODO: Better detect this
