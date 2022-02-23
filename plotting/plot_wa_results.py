@@ -41,10 +41,10 @@ for file in sorted(os.listdir()):
 #
 # Initialize plotting stuff
 #
-plt.figure(figsize=(16,64))
-
 num_rows = len(metrics) + freq.num_rows() + idle.num_rows() + power.num_rows()
 row_pos = 1
+
+plt.figure(figsize=(16,4 * num_rows))
 
 #
 # Plot wa results
