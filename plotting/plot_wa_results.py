@@ -41,7 +41,8 @@ for file in sorted(os.listdir()):
 #
 # Initialize plotting stuff
 #
-num_rows = len(metrics) + freq.num_rows() + idle.num_rows() + power.num_rows()
+num_rows = (len(metrics) + 1)/2 + freq.num_rows() + idle.num_rows() + power.num_rows()
+num_rows = int(num_rows)
 row_pos = 1
 
 plt.figure(figsize=(1*num_rows,2*num_rows))
@@ -49,12 +50,22 @@ plt.figure(figsize=(1*num_rows,2*num_rows))
 #
 # Plot wa results
 #
+col = 0
 print("Plotting Merics: {}".format(metrics))
 for metric in metrics:
     df_metric = df[df.metric == metric]
 
-    plt.subplot(num_rows, 1, row_pos)
-    row_pos += 1
+    if len(metrics) == 1:
+        plt.subplot(num_rows, 1, row_pos)
+        row_pos += 1
+    else:
+        if not col:
+            plt.subplot(num_rows, 2, row_pos * 2 - 1)
+            col = 1
+        else:
+            plt.subplot(num_rows, 2, row_pos * 2 - 0)
+            col = 0
+            row_pos += 1
 
     plt.gca().set_title(metric)
     plt.bar(df_metric.iteration, df_metric.value)
