@@ -26,8 +26,6 @@ pipeline {
 		}
 		stage('Generate Plots') {
 			steps {
-				plot_frequency()
-				plot_power()
 				plot_wa_results(params.NODE, "hackbench", "execution_time")
 			}
 		}
