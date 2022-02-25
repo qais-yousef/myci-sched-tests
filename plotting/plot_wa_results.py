@@ -24,7 +24,7 @@ if num_args > 3:
     for idx in range(3, num_args):
         metrics.append(sys.argv[idx])
 else:
-    metrics = df.metric.unique()
+    metrics = df.metric.sort_values().unique()
 
 #
 # Init perfetto traces stuff
