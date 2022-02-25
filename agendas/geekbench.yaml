@@ -1,0 +1,57 @@
+config:
+    augmentations:
+    - delay
+    iterations: ITERATIONS
+    device: generic_android
+    device_config:
+        adb_server: null
+        big_core: null
+        core_clusters: null
+        core_names: null
+        device: DEVICE
+        disable_selinux: true
+        executables_directory: null
+        load_default_modules: false
+        logcat_poll_period: null
+        model: null
+        modules: null
+        package_data_directory: /data/data
+        poll_transfers: true
+        shell_prompt: !<tag:wa:regex> '40:^.*(shell|root|juno)@?.*:[/~]\S* *[#$] '
+        start_transfer_poll_delay: 30
+        stay_on_mode: null
+        total_transfer_timeout: 3600
+        transfer_poll_period: 30
+        working_directory: null
+    delay:
+        active_cooling: false
+        cleanup_assets: true
+        fixed_before_start: null
+        fixed_between_jobs: DELAY
+        fixed_between_specs: null
+        temperature_before_start: null
+        temperature_between_jobs: null
+        temperature_between_specs: null
+        temperature_file: /sys/devices/virtual/thermal/thermal_zone0/temp
+        temperature_poll_period: 5
+        temperature_timeout: 600
+workloads:
+-   name: geekbench
+    params:
+        cleanup_assets: true
+        disable_update_result: false
+        exact_abi: false
+        force_install: false
+        install_timeout: 300
+        loops: 1
+        markers_enabled: false
+        max_version: null
+        min_version: null
+        package_name: null
+        prefer_host_package: true
+        strict: false
+        timeout: 3600
+        uninstall: false
+        variant: null
+        version: null
+        view: null

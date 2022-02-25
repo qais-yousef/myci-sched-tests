@@ -1,0 +1,51 @@
+pipeline {
+	agent { label params.NODE }
+
+	stages {
+		stage('Connect') {
+			steps {
+				verify_android()
+				connect()
+				android_wakeup_device()
+			}
+		}
+		stage('Prepare Agenda') {
+			steps {
+				fixup_agenda("agendas/geekbench.yaml", "ITERATIONS", env.ITERATIONS)
+				fixup_agenda("agendas/geekbench.yaml", "DELAY", env.DELAY)
+				fixup_agenda("agendas/geekbench.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
+			}
+		}
+		stage('Geekbench-WA') {
+			steps {
+				start_perfetto("geekbench")
+				run_wa("agendas/geekbench.yaml")
+				stop_perfetto()
+			}
+		}
+		stage('Generate Plots') {
+			steps {
+				plot_wa_results(params.NODE, "geekbench")
+			}
+		}
+		stage('tar wa_output') {
+			steps {
+				tar_wa_output()
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
+				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
+			}
+		}
+	}
+	post {
+		always {
+			android_doze_device()
+			disconnect()
+			cleanWs()
+		}
+	}
+}
