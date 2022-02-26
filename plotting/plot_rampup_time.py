@@ -58,11 +58,11 @@ def print_ratios():
 #
 try:
     plt.subplot(num_rows, 1, plot_row)
-    df_all_run.plot(ax=plt.gca(), style='o-', title='Runtime')
+    df_all_run.plot(ax=plt.gca(), style='-', title='Runtime')
     table.plot(df_all_run)
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
-    df_all_duty.plot(ax=plt.gca(), yticks=ticks, style='o-', title='Duty')
+    df_all_duty.plot(ax=plt.gca(), yticks=ticks, style='-', title='Duty')
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
     for file in sorted(os.listdir()):
@@ -71,7 +71,7 @@ try:
     table.plot(df_all_duty)
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
-    df_all_ratios.plot(ax=plt.gca(), style='o-', title='Runtime Ratios')
+    df_all_ratios.plot(ax=plt.gca(), style='-', title='Runtime Ratios')
     table.plot(df_all_ratios)
     print_ratios()
 except Exception as e:

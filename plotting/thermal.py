@@ -36,10 +36,17 @@ def plot(num_rows=len(names), row_pos=1):
 
             df_thermal.temperature = df_thermal.temperature / 1000
 
+            color = ['r', 'y', 'b']
+            i = 0
             for name in names:
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df_thermal[df_thermal.name == name].temperature.plot(title=name + ' (C)', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_thermal.index[0], df_thermal.index[-1]))
+                df_thermal[df_thermal.name == name].temperature.plot(title=name + ' (C)', alpha=0.75, drawstyle='steps-post', style='-', color=color[i], xlim=(df_thermal.index[0], df_thermal.index[-1]))
+                plt.grid()
+
+                i += 1
+                if i == 3:
+                    i = 0
         except Exception as e:
             # Most likely the trace has no thermal info
             # TODO: Better detect this

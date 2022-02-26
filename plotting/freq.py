@@ -58,6 +58,8 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
 
             find_clusters()
 
+            color = ['b', 'y', 'r']
+            i = 0
             for cpu in clusters:
                 if len(cpus):
                     if cpu not in cpus:
@@ -75,13 +77,19 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df_freq_cpu.freq.plot(title='CPU' + str(cpu) + ' Frequency', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_freq.index[0], df_freq.index[-1]))
+                df_freq_cpu.freq.plot(title='CPU' + str(cpu) + ' Frequency', alpha=0.75, drawstyle='steps-post', style='-', color=color[i], xlim=(df_freq.index[0], df_freq.index[-1]))
+                plt.grid()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 if not df_duration.empty:
-                    ax = df_duration.plot.bar(title='CPU' + str(cpu) + ' Frequency residency %', alpha=0.75)
+                    ax = df_duration.plot.bar(title='CPU' + str(cpu) + ' Frequency residency %', alpha=0.75, color=color[i])
                     ax.bar_label(ax.containers[0])
+                    plt.grid()
+
+                i += 1
+                if i == 3:
+                    i = 0
         except Exception as e:
             # Most likely the trace has no freq info
             # TODO: Better detect this

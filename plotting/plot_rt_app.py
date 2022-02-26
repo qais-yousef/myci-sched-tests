@@ -31,7 +31,7 @@ for file in sorted(os.listdir()):
 
         plt.subplot(num_rows, 1, row_pos)
         row_pos += 1
-        df_result.slack.plot(ylim=(0, 20000), style='o-', title='slack', xlim=(df_result.index[0], df_result.index[-1]))
+        df_result.slack.plot(ylim=(0, 20000), style='-', title='slack', xlim=(df_result.index[0], df_result.index[-1]))
 
         row_pos = freq.plot(num_rows=num_rows, row_pos=row_pos, cpus=[0])
         row_pos = util.plot(num_rows=num_rows, row_pos=row_pos, threads=['thread0'])

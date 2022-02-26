@@ -47,7 +47,7 @@ num_metrics = int((len(metrics) + 3) / 4)
 num_rows = num_metrics + freq.num_rows() + idle.num_rows() + thermal.num_rows() + power.num_rows()
 row_pos = 1
 
-plt.figure(figsize=(20,2*num_rows))
+plt.figure(figsize=(24,3*num_rows))
 
 #
 # Plot wa results
@@ -76,9 +76,9 @@ for metric in metrics:
             row_pos += 1
 
     plt.gca().set_title(metric)
-    plt.bar(df_metric.iteration, df_metric.value)
+    plt.bar(df_metric.iteration, df_metric.value, color='grey')
     plt.gca().bar_label(plt.gca().containers[0], label_type='center', color='w')
-    text.plot(-0.15, 1.2, 'Mean = {:,.2f}'.format(df_metric.value.mean()))
+    text.plot(-0.15, 1.1, 'Mean = {:,.2f}'.format(df_metric.value.mean()))
 
 if col:
     row_pos += 1

@@ -53,7 +53,8 @@ def plot(num_rows=0, row_pos=1):
 
             plt.subplot(num_rows, 1, row_pos)
             row_pos += 1
-            df_charge.charge_uah.plot(title='Battery Charge Drop (mAh)', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_charge.index[0], df_charge.index[-1]))
+            df_charge.charge_uah.plot(title='Battery Charge Drop (mAh)', alpha=0.75, drawstyle='steps-post', style='-', xlim=(df_charge.index[0], df_charge.index[-1]))
+            plt.grid()
         except Exception as e:
             # Most likely the trace has no power info
             # TODO: Better detect this
@@ -70,9 +71,10 @@ def plot(num_rows=0, row_pos=1):
 
             plt.subplot(num_rows, 1, row_pos)
             row_pos += 1
-            df_current.current_ma.plot(title='Battery Current (mA)', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df_current.index[0], df_current.index[-1]))
-            text.plot(0.01, 1.20, "Sum: {:,.2f}A".format(df_current.current_ma.sum()/1000))
-            text.plot(0.11, 1.20, "Mean: {:,.2f}mA".format(df_current.current_ma.mean()))
+            df_current.current_ma.plot(title='Battery Current (mA)', alpha=0.75, drawstyle='steps-post', style='-', xlim=(df_current.index[0], df_current.index[-1]))
+            text.plot(0.01, 1.10, "Sum: {:,.2f}A".format(df_current.current_ma.sum()/1000))
+            text.plot(0.11, 1.10, "Mean: {:,.2f}mA".format(df_current.current_ma.mean()))
+            plt.grid()
         except Exception as e:
             # Most likely the trace has no power info
             # TODO: Better detect this
@@ -89,6 +91,8 @@ def plot(num_rows=0, row_pos=1):
             df_power['energy_diff'] = pd.Series()
             df_power['power'] = pd.Series()
 
+            color = ['r', 'y', 'b']
+            i = 0
             for source in df_power.rail.unique():
                 df = df_power[df_power.rail == source].copy()
                 df.duration = -1 * df._ts.diff(periods=-1)
@@ -98,9 +102,14 @@ def plot(num_rows=0, row_pos=1):
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df.power.plot(title=source + ' Power (mW)', alpha=0.75, drawstyle='steps-post', style='o-', xlim=(df.index[0], df.index[-1]))
-                text.plot(0.01, 1.20, "Sum: {:,.2f}W".format(df.power.sum()/1000))
-                text.plot(0.11, 1.20, "Mean: {:,.2f}mW".format(df.power.mean()))
+                df.power.plot(title=source + ' Power (mW)', alpha=0.75, drawstyle='steps-post', style='-', color=color[i], xlim=(df.index[0], df.index[-1]))
+                text.plot(0.01, 1.10, "Sum: {:,.2f}W".format(df.power.sum()/1000))
+                text.plot(0.11, 1.10, "Mean: {:,.2f}mW".format(df.power.mean()))
+                plt.grid()
+
+                i += 1
+                if i == 3:
+                    i = 0
         except Exception as e:
             # Most likely the trace has no power info
             # TODO: Better detect this
