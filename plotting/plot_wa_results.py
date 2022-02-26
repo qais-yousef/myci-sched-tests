@@ -43,8 +43,8 @@ for file in sorted(os.listdir()):
 #
 # Initialize plotting stuff
 #
-num_rows = (len(metrics) + 3)/4 + freq.num_rows() + idle.num_rows() + thermal.num_rows() + power.num_rows()
-num_rows = int(num_rows)
+num_metrics = int((len(metrics) + 3) / 4)
+num_rows = num_metrics + freq.num_rows() + idle.num_rows() + thermal.num_rows() + power.num_rows()
 row_pos = 1
 
 plt.figure(figsize=(20,2*num_rows))
@@ -57,7 +57,7 @@ print("Plotting Merics ({}): {}".format(len(metrics), metrics))
 for metric in metrics:
     df_metric = df[df.metric == metric]
 
-    if len(metrics) == 1:
+    if num_metrics == 1:
         plt.subplot(num_rows, 1, row_pos)
         row_pos += 1
     else:
