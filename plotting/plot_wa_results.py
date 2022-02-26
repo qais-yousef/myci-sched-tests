@@ -45,7 +45,7 @@ num_rows = (len(metrics) + 1)/2 + freq.num_rows() + idle.num_rows() + power.num_
 num_rows = int(num_rows)
 row_pos = 1
 
-plt.figure(figsize=(1*num_rows,2*num_rows))
+plt.figure(figsize=(20,2*num_rows))
 
 #
 # Plot wa results
@@ -69,12 +69,8 @@ for metric in metrics:
 
     plt.gca().set_title(metric)
     plt.bar(df_metric.iteration, df_metric.value)
-    plt.gca().bar_label(plt.gca().containers[0])
-
-    mean = df_metric.value.mean()
-    b, t = plt.gca().get_ylim()
-    plt.axhline(y=mean, color='r', linestyle='-')
-    text.plot(0.1, mean/t, 'Mean = {:,.2f}'.format(mean))
+    plt.gca().bar_label(plt.gca().containers[0], label_type='center', color='w')
+    text.plot(0.1, 1.2, 'Mean = {:,.2f}'.format(df_metric.value.mean()))
 
 #
 # Plot perfetto stuff
