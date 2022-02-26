@@ -53,7 +53,7 @@ plt.figure(figsize=(20,2*num_rows))
 # Plot wa results
 #
 col = 0
-print("Plotting Merics: {}".format(metrics))
+print("Plotting Merics ({}): {}".format(len(metrics), metrics))
 for metric in metrics:
     df_metric = df[df.metric == metric]
 
@@ -79,6 +79,9 @@ for metric in metrics:
     plt.bar(df_metric.iteration, df_metric.value)
     plt.gca().bar_label(plt.gca().containers[0], label_type='center', color='w')
     text.plot(-0.15, 1.2, 'Mean = {:,.2f}'.format(df_metric.value.mean()))
+
+if col:
+    row_pos += 1
 
 #
 # Plot perfetto stuff
