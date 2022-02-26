@@ -6,6 +6,7 @@ import glob
 import sys
 import freq
 import idle
+import thermal
 import power
 import text
 import os
@@ -34,6 +35,7 @@ for file in sorted(os.listdir()):
         trace = tp(file_path=file)
         freq.init(trace)
         idle.init(trace)
+        thermal.init(trace)
         power.init(trace)
         trace.close()
         break
@@ -41,7 +43,7 @@ for file in sorted(os.listdir()):
 #
 # Initialize plotting stuff
 #
-num_rows = (len(metrics) + 3)/4 + freq.num_rows() + idle.num_rows() + power.num_rows()
+num_rows = (len(metrics) + 3)/4 + freq.num_rows() + idle.num_rows() + thermal.num_rows() + power.num_rows()
 num_rows = int(num_rows)
 row_pos = 1
 
@@ -83,6 +85,7 @@ for metric in metrics:
 #
 row_pos = freq.plot(num_rows=num_rows, row_pos=row_pos)
 row_pos = idle.plot(num_rows=num_rows, row_pos=row_pos)
+row_pos = thermal.plot(num_rows=num_rows, row_pos=row_pos)
 row_pos = power.plot(num_rows=num_rows, row_pos=row_pos)
 
 plt.tight_layout()
