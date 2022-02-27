@@ -19,13 +19,17 @@ def num_rows():
         if df_idle is None:
             df_idle = trace_idle.as_pandas_dataframe()
 
-        return len(df_idle.cpu.unique())
+        return int((len(df_idle.cpu.unique()) + 3) / 4)
 
 def plot(num_rows=0, row_pos=1, cpus=[]):
 
         global df_idle
         if df_idle is None:
             df_idle = trace_idle.as_pandas_dataframe()
+
+        if not num_rows:
+            func = globals()['num_rows']
+            num_rows = func()
 
         try:
             df_idle.ts = df_idle.ts - df_idle.ts[0]
@@ -40,6 +44,7 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
 
             nr_cpus = len(df_idle.cpu.unique())
 
+            col = 0
             df_idle_cpu = df_idle[df_idle.cpu == 0]
             for cpu in range(nr_cpus):
                 if len(cpus):
@@ -52,17 +57,29 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
                 total_duration = df_idle_cpu.duration.sum()
                 df_duration =  df_idle_cpu.groupby('idle').duration.sum() * 100 / total_duration
 
-                if not num_rows:
-                    func = globals()['num_rows']
-                    num_rows = func()
+                if col == 0:
+                    plt.subplot(num_rows, 4, row_pos * 4 - 3)
+                    col = 1
+                elif col == 1:
+                    plt.subplot(num_rows, 4, row_pos * 4 - 2)
+                    col = 2
+                elif col == 2:
+                    plt.subplot(num_rows, 4, row_pos * 4 - 1)
+                    col = 3
+                else:
+                    plt.subplot(num_rows, 4, row_pos * 4 - 0)
+                    col = 0
+                    row_pos += 1
 
-                plt.subplot(num_rows, 1, row_pos)
-                row_pos += 1
                 if not df_duration.empty:
                     ax = df_duration.plot.bar(title='CPU{}'.format(cpu) + ' Idle residency %', alpha=0.75, color='grey')
                     ax.bar_label(ax.containers[0])
-                    text.plot(0.01, 1.10, "0 is NOT idle (IDLE_EXIT)")
+                    ax.set_xlabel('Idle State')
+                    text.plot(0.01, 0.98, "0 is NOT idle (IDLE_EXIT)")
                     plt.grid()
+
+            if col:
+                row_pos += 1
         except Exception as e:
             # Most likely the trace has no idle info
             # TODO: Better detect this
