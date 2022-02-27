@@ -28,7 +28,7 @@ def num_rows():
         if df_power.empty:
             return 2
         else:
-            return len(df_power.rail.unique()) + 2
+            return len(df_power.rail.unique()) * 2 + 2
 
 def plot(num_rows=0, row_pos=1):
 
@@ -106,6 +106,11 @@ def plot(num_rows=0, row_pos=1):
                 text.plot(0.01, 1.10, "Sum: {:,.2f}W".format(df.power.sum()/1000))
                 text.plot(0.11, 1.10, "Mean: {:,.2f}mW".format(df.power.mean()))
                 plt.grid()
+
+                plt.subplot(num_rows, 1, row_pos)
+                row_pos += 1
+                plt.title(source + ' Power Histogram (mW)')
+                df.power.hist(bins=10, grid=True, alpha=0.75, color=color[i])
 
                 i += 1
                 if i == 3:
