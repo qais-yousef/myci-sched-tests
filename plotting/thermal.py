@@ -51,7 +51,7 @@ def plot(num_rows=0, row_pos=1):
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 plt.title(name + ' Histogram (C)')
-                df_thermal[df_thermal.name == name].temperature.hist(bins=10, grid=True, alpha=0.75, color=color[i])
+                df_thermal[df_thermal.name == name].temperature.hist(bins=100, density=True, grid=True, alpha=0.75, color=color[i])
 
                 i += 1
                 if i == 3:
