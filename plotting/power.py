@@ -98,18 +98,18 @@ def plot(num_rows=0, row_pos=1):
                 df.duration = -1 * df._ts.diff(periods=-1)
                 df = df[df.duration != 0]
                 df.energy_diff = -1 * df.energy.diff(periods=-1)
-                df.power = df.energy_diff / (1000 * df.duration)
+                df.power = df.energy_diff / (1000000 * df.duration)
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df.power.plot(title=source + ' Power (mW)', alpha=0.75, drawstyle='steps-post', style='-', color=color[i], xlim=(df.index[0], df.index[-1]))
-                text.plot(0.01, 1.10, "Sum: {:,.2f}W".format(df.power.sum()/1000))
-                text.plot(0.11, 1.10, "Mean: {:,.2f}mW".format(df.power.mean()))
+                df.power.plot(title=source + ' Power (W)', alpha=0.75, drawstyle='steps-post', style='-', color=color[i], xlim=(df.index[0], df.index[-1]))
+                text.plot(0.01, 1.10, "Energy: {:,.2f}J".format(df.energy_diff.sum()/1000000))
+                text.plot(0.11, 1.10, "Mean: {:,.2f}W".format(df.power.mean()))
                 plt.grid()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                plt.title(source + ' Power Histogram (mW)')
+                plt.title(source + ' Power Histogram (W)')
                 df.power.hist(bins=100, density=True, grid=True, alpha=0.75, color=color[i])
 
                 i += 1
