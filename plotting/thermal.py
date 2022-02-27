@@ -22,11 +22,15 @@ def init(trace):
 
 def num_rows():
 
-        return len(names)
+        return len(names) * 2
 
-def plot(num_rows=len(names), row_pos=1):
+def plot(num_rows=0, row_pos=1):
 
         df_thermal = trace_thermal.as_pandas_dataframe()
+
+        if not num_rows:
+            func = globals()['num_rows']
+            num_rows = func()
 
         try:
             df_thermal.ts = df_thermal.ts - df_thermal.ts[0]
@@ -43,6 +47,11 @@ def plot(num_rows=len(names), row_pos=1):
                 row_pos += 1
                 df_thermal[df_thermal.name == name].temperature.plot(title=name + ' (C)', alpha=0.75, drawstyle='steps-post', style='-', color=color[i], xlim=(df_thermal.index[0], df_thermal.index[-1]))
                 plt.grid()
+
+                plt.subplot(num_rows, 1, row_pos)
+                row_pos += 1
+                plt.title(name + ' Histogram (C)')
+                df_thermal[df_thermal.name == name].temperature.hist(bins=10, grid=True, alpha=0.75, color=color[i])
 
                 i += 1
                 if i == 3:
