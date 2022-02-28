@@ -36,6 +36,7 @@ def plot(num_rows=0, row_pos=1, threads=[]):
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 df_util.groupby('comm').util.plot(title=thread + ' util', alpha=0.75, xlim=(df_util.index[0], df_util.index[-1]))
+                plt.grid()
         except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
