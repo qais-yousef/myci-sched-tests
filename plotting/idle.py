@@ -6,12 +6,13 @@ import text
 
 query = "select ts, cpu, value as idle from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpuidle'"
 
-df_idle = None
-
 def init(trace):
 
         global trace_idle
         trace_idle = trace.query(query)
+
+        global df_idle
+        df_idle = None
 
 def num_rows():
 

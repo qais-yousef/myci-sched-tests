@@ -5,13 +5,16 @@ import matplotlib.pyplot as plt
 
 query = "select ts, cpu, value as freq from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpufreq'"
 
-df_freq = None
-clusters = None
-
 def init(trace):
 
         global trace_freq
         trace_freq = trace.query(query)
+
+        global df_freq
+        df_freq = None
+
+        global clusters
+        clusters = None
 
 def find_clusters():
 

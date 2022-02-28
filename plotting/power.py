@@ -8,8 +8,6 @@ query_charge = "select ts, value as charge_uah from counter as c left join count
 query_current = "select ts, value as current_ua from counter as c left join counter_track t on c.track_id = t.id where t.name = 'batt.current_ua'"
 query_power = "select ts, t.name as rail, value as energy from counter as c left join counter_track t on c.track_id = t.id where t.name like 'power.rails.cpu.%'"
 
-df_power = None
-
 def init(trace):
 
         global trace_charge
@@ -18,6 +16,9 @@ def init(trace):
         trace_charge = trace.query(query_charge)
         trace_current = trace.query(query_current)
         trace_power = trace.query(query_power)
+
+        global df_power
+        df_power = None
 
 def num_rows():
 
