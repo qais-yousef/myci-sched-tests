@@ -57,23 +57,19 @@ print("Plotting Merics ({}): {}".format(len(metrics), metrics))
 for metric in metrics:
     df_metric = df[df.metric == metric]
 
-    if num_metrics == 1:
-        plt.subplot(num_rows, 1, row_pos)
-        row_pos += 1
+    if col == 0:
+        plt.subplot(num_rows, 4, row_pos * 4 - 3)
+        col = 1
+    elif col == 1:
+        plt.subplot(num_rows, 4, row_pos * 4 - 2)
+        col = 2
+    elif col == 2:
+        plt.subplot(num_rows, 4, row_pos * 4 - 1)
+        col = 3
     else:
-        if col == 0:
-            plt.subplot(num_rows, 4, row_pos * 4 - 3)
-            col = 1
-        elif col == 1:
-            plt.subplot(num_rows, 4, row_pos * 4 - 2)
-            col = 2
-        elif col == 2:
-            plt.subplot(num_rows, 4, row_pos * 4 - 1)
-            col = 3
-        else:
-            plt.subplot(num_rows, 4, row_pos * 4 - 0)
-            col = 0
-            row_pos += 1
+        plt.subplot(num_rows, 4, row_pos * 4 - 0)
+        col = 0
+        row_pos += 1
 
     plt.gca().set_title(metric)
     plt.bar(df_metric.iteration, df_metric.value, color='grey')
