@@ -12,7 +12,7 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-num_rows=8
+num_rows=9
 
 for file in sorted(os.listdir()):
     if file.endswith(".csv"):
@@ -29,6 +29,10 @@ for file in sorted(os.listdir()):
         plt.figure(figsize=(16,16))
         row_pos = 1
 
+        plt.subplot(num_rows, 1, row_pos)
+        row_pos += 1
+        df_result.run.plot(ylim=(0, 20000), style='-', title='runtime (rt-app)', xlim=(df_result.index[0], df_result.index[-1]))
+        plt.grid()
         plt.subplot(num_rows, 1, row_pos)
         row_pos += 1
         df_result.slack.plot(ylim=(0, 20000), style='-', title='slack', xlim=(df_result.index[0], df_result.index[-1]))
