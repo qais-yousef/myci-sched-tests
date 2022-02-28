@@ -19,7 +19,7 @@ pipeline {
 				}
 			}
 			steps {
-				start_perfetto("uclamp_rampup_time_max_perf")
+				start_perfetto("uclamp_rampup_time_max_perf", "pelt runtime")
 				uclamp_rampup_time(1024, 1024, "uclamp_rampup_time_max_perf.csv")
 				stop_perfetto()
 			}
@@ -31,7 +31,7 @@ pipeline {
 				}
 			}
 			steps {
-				start_perfetto("uclamp_rampup_time_min_perf")
+				start_perfetto("uclamp_rampup_time_min_perf", "pelt runtime")
 				uclamp_rampup_time(0, 0, "uclamp_rampup_time_min_perf.csv")
 				stop_perfetto()
 			}
@@ -43,7 +43,7 @@ pipeline {
 				}
 			}
 			steps {
-				start_perfetto("uclamp_rampup_time_normal")
+				start_perfetto("uclamp_rampup_time_normal", "pelt runtime")
 				uclamp_rampup_time(0, 1024, "uclamp_rampup_time_normal.csv")
 				stop_perfetto()
 			}
