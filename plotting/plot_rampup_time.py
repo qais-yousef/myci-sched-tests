@@ -59,19 +59,23 @@ def print_ratios():
 try:
     plt.subplot(num_rows, 1, plot_row)
     df_all_run.plot(ax=plt.gca(), style='-', title='Runtime')
+    plt.grid()
     table.plot(df_all_run)
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
     df_all_duty.plot(ax=plt.gca(), yticks=ticks, style='-', title='Duty')
+    plt.grid()
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
     for file in sorted(os.listdir()):
         if file.endswith(".csv"):
             df_all_duty[file].plot.hist(ax=plt.gca(), legend=True, bins=32, xticks=ticks, alpha=0.5, title='Duty Hist')
+    plt.grid()
     table.plot(df_all_duty)
     plot_row += 1
     plt.subplot(num_rows, 1, plot_row)
     df_all_ratios.plot(ax=plt.gca(), style='-', title='Runtime Ratios')
+    plt.grid()
     table.plot(df_all_ratios)
     print_ratios()
 except Exception as e:
