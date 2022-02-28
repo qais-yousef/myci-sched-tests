@@ -132,6 +132,126 @@
 						"ref" : "unique",
 						"period" : 16000
 					}
+				},
+				"stage2800": {
+					"loop" : 124,
+					"run" :   2800,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage3000": {
+					"loop" : 124,
+					"run" :   3000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage4000": {
+					"loop" : 124,
+					"run" :   4000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage5000": {
+					"loop" : 124,
+					"run" :   5000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage6000": {
+					"loop" : 124,
+					"run" :   6000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage7000": {
+					"loop" : 124,
+					"run" :   7000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage8000": {
+					"loop" : 124,
+					"run" :   8000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage9000": {
+					"loop" : 124,
+					"run" :   9000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage10000": {
+					"loop" : 124,
+					"run" :   10000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage11000": {
+					"loop" : 124,
+					"run" :   11000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage12000": {
+					"loop" : 124,
+					"run" :   12000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage13000": {
+					"loop" : 124,
+					"run" :   13000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage14000": {
+					"loop" : 124,
+					"run" :   14000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage15000": {
+					"loop" : 124,
+					"run" :   15000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
+				},
+				"stage16000": {
+					"loop" : 124,
+					"run" :   16000,
+					"timer" : {
+						"ref" : "unique",
+						"period" : 16000
+					}
 				}
 			}
 		}
