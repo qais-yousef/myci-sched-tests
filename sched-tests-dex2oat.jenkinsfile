@@ -1,0 +1,40 @@
+pipeline {
+	agent { label params.NODE }
+
+	stages {
+		stage('Connect') {
+			steps {
+				verify_android()
+				connect()
+				android_wakeup_device()
+			}
+		}
+		stage('dex2oat of all packages') {
+			steps {
+				start_perfetto("dex2oat")
+				run_dex2oat()
+				stop_perfetto()
+			}
+		}
+		stage('Generate Plots') {
+			steps {
+				plot_frequency()
+				plot_idle()
+				plot_power()
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
+			}
+		}
+	}
+	post {
+		always {
+			android_doze_device()
+			disconnect()
+			cleanWs()
+		}
+	}
+}
