@@ -6,7 +6,7 @@ def call(background=false) {
 				if [ "${background}" == "false" ]; then
 					adb -s ${IPADDRESS}:${PORT} shell -x 'cmd package compile -m speed-profile -f -a'
 				else
-					adb -s ${IPADDRESS}:${PORT} shell -x nohup 'cmd package compile -m speed-profile -f -a' &
+					adb -s ${IPADDRESS}:${PORT} shell nohup 'cmd package compile -m speed-profile -f -a' &
 				fi
 			"""
 		} else {
