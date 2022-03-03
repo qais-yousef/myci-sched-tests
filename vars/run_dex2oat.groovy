@@ -14,9 +14,8 @@ def call(background=false) {
 		}
 		break
 	case "linux":
-		error "No linux support yet"
-		break
 	default:
+		error "Only supported on Android"
 		break
 	}
 }

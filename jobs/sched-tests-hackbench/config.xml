@@ -26,6 +26,11 @@
           <name>NODE</name>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
+        <hudson.model.BooleanParameterDefinition>
+          <name>RUN_DEX2OAT</name>
+          <description>Run JIT compilation of all apps as a noisy background activity while running the test. This will be triggered once before running the test.</description>
+          <defaultValue>false</defaultValue>
+        </hudson.model.BooleanParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>ITERATIONS</name>
           <description>Number of hackbench iterations to run.</description>

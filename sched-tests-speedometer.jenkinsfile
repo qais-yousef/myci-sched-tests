@@ -16,6 +16,17 @@ pipeline {
 				fixup_agenda("agendas/speedometer.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
 			}
 		}
+		stage('dex2oat of all packages') {
+			when {
+				expression {
+					return env.RUN_DEX2OAT == 'true';
+				}
+			}
+			steps {
+				wait_dex2oat()
+				run_dex2oat(true)
+			}
+		}
 		stage('Speedometer-WA') {
 			steps {
 				start_perfetto("speedometer")
@@ -38,6 +49,16 @@ pipeline {
 				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
 				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
+			}
+		}
+		stage('Wait dex2oat to finish') {
+			when {
+				expression {
+					return env.RUN_DEX2OAT == 'true';
+				}
+			}
+			steps {
+				wait_dex2oat()
 			}
 		}
 	}
