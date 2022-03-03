@@ -38,7 +38,7 @@ config:
 workloads:
 -   name: uibench
     params:
-        activity: 'BitmapUploadActivity RenderingJitter TrivialAnimationActivity'
+        activity: 'BitmapUploadActivity RenderingJitter TrivialAnimationActivity EditTextTypeActivity FullscreenOverdrawActivity InvalidateActivity GlTextureViewActivity'
         cleanup_assets: true
         duration: 10
         exact_abi: false
