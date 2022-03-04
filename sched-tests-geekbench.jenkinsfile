@@ -33,7 +33,7 @@ pipeline {
 					}
 					steps {
 						wait_dex2oat()
-						run_dex2oat()
+						run_dex2oat(env.ITERATIONS, env.DELAY)
 					}
 					post {
 						always {
