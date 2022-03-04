@@ -16,22 +16,31 @@ pipeline {
 				fixup_agenda("agendas/pcmark.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
 			}
 		}
-		stage('dex2oat of all packages') {
-			when {
-				expression {
-					return env.RUN_DEX2OAT == 'true';
+		stage('Run') {
+			parallel {
+				stage('PCMark-WA') {
+					steps {
+						start_perfetto("pcmark")
+						run_wa("agendas/pcmark.yaml")
+						stop_perfetto()
+					}
 				}
-			}
-			steps {
-				wait_dex2oat()
-				run_dex2oat(true)
-			}
-		}
-		stage('PCMark-WA') {
-			steps {
-				start_perfetto("pcmark")
-				run_wa("agendas/pcmark.yaml")
-				stop_perfetto()
+				stage('dex2oat of all packages') {
+					when {
+						expression {
+							return env.RUN_DEX2OAT == 'true';
+						}
+					}
+					steps {
+						wait_dex2oat()
+						run_dex2oat()
+					}
+					post {
+						always {
+							wait_dex2oat()
+						}
+					}
+				}
 			}
 		}
 		stage('Generate Plots') {
@@ -49,16 +58,6 @@ pipeline {
 				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
 				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
-			}
-		}
-		stage('Wait dex2oat to finish') {
-			when {
-				expression {
-					return env.RUN_DEX2OAT == 'true';
-				}
-			}
-			steps {
-				wait_dex2oat()
 			}
 		}
 	}
