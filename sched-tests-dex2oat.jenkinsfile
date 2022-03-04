@@ -11,6 +11,7 @@ pipeline {
 		}
 		stage('dex2oat of all packages') {
 			steps {
+				wait_dex2oat()
 				start_perfetto("dex2oat")
 				run_dex2oat()
 				stop_perfetto()
