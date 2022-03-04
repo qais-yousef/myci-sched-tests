@@ -1,13 +1,9 @@
-def call(background=false) {
+def call() {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
 		if (env.IPADDRESS && env.PORT) {
 			sh """
-				if [ "${background}" == "false" ]; then
-					adb -s ${IPADDRESS}:${PORT} shell -x 'cmd package compile -m speed-profile -f -a'
-				else
-					adb -s ${IPADDRESS}:${PORT} shell nohup 'cmd package compile -m speed-profile -f -a' &
-				fi
+				adb -s ${IPADDRESS}:${PORT} shell -x 'cmd package compile -m speed-profile -f -a'
 			"""
 		} else {
 			error "Missing IPADDRESS and/or PORT info"
