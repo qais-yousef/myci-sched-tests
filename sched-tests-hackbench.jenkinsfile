@@ -42,6 +42,11 @@ pipeline {
 						}
 					}
 				}
+				stage('(Workaround)') {
+					steps {
+						sleep 3
+					}
+				}
 			}
 		}
 		stage('Generate Plots') {
