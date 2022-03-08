@@ -51,6 +51,7 @@ pipeline {
 		stage('Generate Plots') {
 			steps {
 				plot_wa_results(params.NODE, "uibench")
+				plot_jank()
 			}
 		}
 		stage('tar wa_output') {

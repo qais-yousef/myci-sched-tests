@@ -27,6 +27,7 @@ pipeline {
 				plot_frequency()
 				plot_idle()
 				plot_power()
+				plot_jank()
 			}
 		}
 		stage('Archive') {
