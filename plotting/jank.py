@@ -61,7 +61,7 @@ def plot(num_rows=0, row_pos=1, names=[]):
                         continue
 
                 df_jank_process = df_jank[df_jank.name == name].copy()
-                df_janky_frames = df_jank_process[df_jank_process.on_time_finish == 0].copy()
+                df_janky_frames = df_jank_process[df_jank_process.jank_type != 'None'].copy()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
