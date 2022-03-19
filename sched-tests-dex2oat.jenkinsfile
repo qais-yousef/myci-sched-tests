@@ -8,6 +8,10 @@ pipeline {
 		string(name: 'DELAY', defaultValue: '10', description: 'Time in seconds to wait between each run.')
 	}
 
+	environment {
+		RUN_DEX2OAT = false
+	}
+
 	stages {
 		stage('Connect') {
 			steps {
