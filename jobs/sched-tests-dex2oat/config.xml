@@ -26,24 +26,13 @@ https://source.android.com/devices/tech/dalvik/jit-compiler#force-compilation-of
       <parameterDefinitions>
         <hudson.model.StringParameterDefinition>
           <name>NODE</name>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>ITERATIONS</name>
-          <description>Number of iterations to run.</description>
-          <defaultValue>10</defaultValue>
-          <trim>false</trim>
-        </hudson.model.StringParameterDefinition>
-        <hudson.model.StringParameterDefinition>
-          <name>DELAY</name>
-          <description>Delay in seconds between each iteration.</description>
-          <defaultValue>10</defaultValue>
+          <description>The DUT to run on. Must be Android based DUT.</description>
           <trim>false</trim>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
   </properties>
-  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2659.v52d3de6044d0">
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition" plugin="workflow-cps@2660.vb_c0412dc4e6d">
     <scm class="hudson.plugins.git.GitSCM" plugin="git@4.10.3">
       <configVersion>2</configVersion>
       <userRemoteConfigs>
