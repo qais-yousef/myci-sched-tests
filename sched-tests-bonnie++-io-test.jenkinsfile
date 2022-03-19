@@ -1,10 +1,17 @@
 pipeline {
 	agent { label params.NODE }
 
+	parameters {
+		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Linux based DUT.')
+		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+	}
+
 	stages {
 		stage('Verify') {
 			steps {
+				set_description()
 				verify_linux()
+				verify_params()
 			}
 		}
 		stage('Bonnie++') {

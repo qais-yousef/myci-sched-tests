@@ -1,10 +1,20 @@
 pipeline {
 	agent { label params.NODE }
 
+	parameters {
+		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Linux based DUT.')
+		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+		booleanParam(name: 'MAX_PERF', defaultValue: true, description: 'Run rampup test while system is set to max frequency')
+		booleanParam(name: 'MIN_PERF', defaultValue: true, description: 'Run rampup test while system is set to min frequency')
+		booleanParam(name: 'NORMAL_PERF', defaultValue: true, description: 'Run rampup test while schedutil sets frequency as normal')
+	}
+
 	stages {
 		stage('Verify') {
 			steps {
+				set_description()
 				verify_linux()
+				verify_params(!env.MAX_PERF || !env.MIN_PERF || !env.NORMAL_PERF)
 			}
 		}
 		stage('Calibrate rt-app') {

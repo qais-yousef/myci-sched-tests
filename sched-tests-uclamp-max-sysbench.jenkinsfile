@@ -1,10 +1,20 @@
 pipeline {
 	agent { label params.NODE }
 
+	parameters {
+		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Linux based DUT.')
+		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+		string(name: 'ITERATIONS', defaultValue: '100', description: 'Number of iterations to run')
+		string(name: 'DELAY', defaultValue: '0', description: 'Time in seconds to wait between each run.')
+		string(name: 'NUMTHREADS', defaultValue: '1', description: 'Number of sysbench threads to use.')
+	}
+
 	stages {
 		stage('Verify') {
 			steps {
+				set_description()
 				verify_linux()
+				verify_params(!env.ITERATIONS || !env.DELAY || !env.NUMTHREADS)
 			}
 		}
 		stage('Sysbench Idle') {
