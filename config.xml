@@ -1,15 +1,15 @@
 <?xml version='1.1' encoding='UTF-8'?>
-<com.cloudbees.hudson.plugins.folder.Folder plugin="cloudbees-folder@6.15">
+<com.cloudbees.hudson.plugins.folder.Folder plugin="cloudbees-folder@6.708.ve61636eb_65a_5">
   <actions/>
   <description>Scheduler performance and power consumption tests.</description>
   <displayName>Sched-Tests</displayName>
   <properties>
-    <org.jenkinsci.plugins.workflow.libs.FolderLibraries plugin="workflow-cps-global-lib@2.18">
+    <org.jenkinsci.plugins.workflow.libs.FolderLibraries plugin="workflow-cps-global-lib@564.ve62a_4eb_b_e039">
       <libraries>
         <org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>
           <name>sched-tests-utils</name>
           <retriever class="org.jenkinsci.plugins.workflow.libs.SCMSourceRetriever">
-            <scm class="org.jenkinsci.plugins.github_branch_source.GitHubSCMSource" plugin="github-branch-source@2.10.2">
+            <scm class="org.jenkinsci.plugins.github_branch_source.GitHubSCMSource" plugin="github-branch-source@2.11.4">
               <id>0ecc8cff-ee68-41fa-a184-f4ca2894e301</id>
               <apiUri>https://api.github.com</apiUri>
               <repoOwner>qais-yousef</repoOwner>
@@ -30,7 +30,7 @@
             </scm>
           </retriever>
           <defaultVersion>main</defaultVersion>
-          <implicit>true</implicit>
+          <implicit>false</implicit>
           <allowVersionOverride>true</allowVersionOverride>
           <includeInChangesets>true</includeInChangesets>
         </org.jenkinsci.plugins.workflow.libs.LibraryConfiguration>

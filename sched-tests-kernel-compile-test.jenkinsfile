@@ -4,17 +4,23 @@ pipeline {
 	parameters {
 		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Linux based DUT.')
 		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+		string(name: 'BRANCH', defaultValue: 'main', description: 'Advanced users only. Use \'dev\' branch to test new job features.')
 		string(name: 'UCLAMP_MIN', defaultValue: '0', description: 'Parameter to pass to uclampset -m ${UCLAMP_MIN}')
 		string(name: 'UCLAMP_MAX', defaultValue: '1024', description: 'Parameter to pass to uclampset -M ${UCLAMP_MAX}')
 		string(name: 'NUM_PARALLEL_JOBS', defaultValue: '2', description: 'Parameter to pass to make -j ${NUM_PARALLEL_JOBS}')
 	}
 
 	stages {
+		stage('Init') {
+			steps {
+				library "sched-tests-utils@${BRANCH}"
+				set_description()
+				verify_params(!env.UCLAMP_MIN || !env.UCLAMP_MAX || !env.NUM_PARALLEL_JOBS)
+			}
+		}
 		stage('Verify') {
 			steps {
-				set_description()
 				verify_linux()
-				verify_params(!env.UCLAMP_MIN || !env.UCLAMP_MAX || !env.NUM_PARALLEL_JOBS)
 			}
 		}
 		stage('Checkout') {

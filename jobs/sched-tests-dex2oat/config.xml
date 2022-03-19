@@ -42,7 +42,7 @@ https://source.android.com/devices/tech/dalvik/jit-compiler#force-compilation-of
       </userRemoteConfigs>
       <branches>
         <hudson.plugins.git.BranchSpec>
-          <name>*/main</name>
+          <name>${BRANCH}</name>
         </hudson.plugins.git.BranchSpec>
       </branches>
       <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -50,7 +50,7 @@ https://source.android.com/devices/tech/dalvik/jit-compiler#force-compilation-of
       <extensions/>
     </scm>
     <scriptPath>sched-tests-dex2oat.jenkinsfile</scriptPath>
-    <lightweight>true</lightweight>
+    <lightweight>false</lightweight>
   </definition>
   <triggers/>
   <disabled>false</disabled>
