@@ -1,12 +1,22 @@
 pipeline {
 	agent { label params.NODE }
 
+	parameters {
+		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Android based DUT.')
+		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+		booleanParam(name: 'RUN_DEX2OAT', defaultValue: false, description: "Run JIT compilation of all apps as a noisy background activity while running the test. We'll honour the specified ITERATIONS and DELAY params.")
+		string(name: 'ITERATIONS', defaultValue: '10', description: 'Number of iterations to run')
+		string(name: 'DELAY', defaultValue: '10', description: 'Time in seconds to wait between each run.')
+	}
+
 	stages {
 		stage('Connect') {
 			steps {
+				set_description()
 				verify_android()
 				connect()
 				android_wakeup_device()
+				verify_params()
 			}
 		}
 		stage('Prepare Agenda') {
