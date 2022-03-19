@@ -15,8 +15,8 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${BRANCH}"
-				set_description()
 				verify_params()
+				set_description()
 			}
 		}
 		stage('Connect') {

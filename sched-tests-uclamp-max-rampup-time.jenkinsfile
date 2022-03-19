@@ -14,8 +14,8 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${BRANCH}"
-				set_description()
 				verify_params(!env.MAX_PERF || !env.MIN_PERF || !env.NORMAL_PERF)
+				set_description()
 			}
 		}
 		stage('Verify') {

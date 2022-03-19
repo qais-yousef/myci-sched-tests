@@ -14,8 +14,8 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${BRANCH}"
-				set_description()
 				verify_params(!env.ITERATIONS || !env.DELAY || !env.NUMTHREADS)
+				set_description()
 			}
 		}
 		stage('Verify') {

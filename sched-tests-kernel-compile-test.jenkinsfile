@@ -14,8 +14,8 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${BRANCH}"
-				set_description()
 				verify_params(!env.UCLAMP_MIN || !env.UCLAMP_MAX || !env.NUM_PARALLEL_JOBS)
+				set_description()
 			}
 		}
 		stage('Verify') {

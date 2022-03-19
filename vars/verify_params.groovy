@@ -1,5 +1,5 @@
 def call(extra_checks=false) {
-	if (!env.NODE || extra_checks) {
+	if (!env.NODE || !env.DESCRIPTION || extra_checks) {
 		script {
 			currentBuild.description = "${NODE}: Parameters has changed, please refresh the page and try again"
 			currentBuild.result = 'ABORTED'
