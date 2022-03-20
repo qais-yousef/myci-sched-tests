@@ -42,7 +42,7 @@ https://source.android.com/devices/tech/dalvik/jit-compiler#force-compilation-of
       </userRemoteConfigs>
       <branches>
         <hudson.plugins.git.BranchSpec>
-          <name>${BRANCH}</name>
+          <name>${MYCI_BRANCH}</name>
         </hudson.plugins.git.BranchSpec>
       </branches>
       <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>

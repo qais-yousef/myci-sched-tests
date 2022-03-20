@@ -4,7 +4,7 @@ pipeline {
 	parameters {
 		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Linux based DUT.')
 		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
-		string(name: 'BRANCH', defaultValue: 'main', description: 'Advanced users only. Use \'dev\' branch to test new job features.')
+		string(name: 'MYCI_BRANCH', defaultValue: 'main', description: 'Advanced users only. Use \'dev\' branch to test new job features.')
 		string(name: 'ITERATIONS', defaultValue: '100', description: 'Number of iterations to run')
 		string(name: 'DELAY', defaultValue: '0', description: 'Time in seconds to wait between each run.')
 		string(name: 'NUMTHREADS', defaultValue: '1', description: 'Number of sysbench threads to use.')
@@ -13,7 +13,7 @@ pipeline {
 	stages {
 		stage('Init') {
 			steps {
-				library "sched-tests-utils@${BRANCH}"
+				library "sched-tests-utils@${MYCI_BRANCH}"
 				verify_params(!env.ITERATIONS || !env.DELAY || !env.NUMTHREADS)
 				set_description()
 			}
