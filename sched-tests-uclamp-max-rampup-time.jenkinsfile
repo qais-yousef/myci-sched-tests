@@ -4,10 +4,14 @@ pipeline {
 	parameters {
 		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Linux based DUT.')
 		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
-		string(name: 'MYCI_BRANCH', defaultValue: 'main', description: 'Advanced users only. Use \'dev\' branch to test new job features.')
+		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
 		booleanParam(name: 'MAX_PERF', defaultValue: true, description: 'Run rampup test while system is set to max frequency')
 		booleanParam(name: 'MIN_PERF', defaultValue: true, description: 'Run rampup test while system is set to min frequency')
 		booleanParam(name: 'NORMAL_PERF', defaultValue: true, description: 'Run rampup test while schedutil sets frequency as normal')
+	}
+
+	environment {
+		MYCI_BRANCH = "${BRANCH}"
 	}
 
 	stages {
