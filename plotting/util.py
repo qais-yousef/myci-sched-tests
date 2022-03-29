@@ -57,12 +57,12 @@ def plot(num_rows=0, row_pos=1, threads=[]):
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 df = df_util_cfs_root[df_util_cfs_root.cpu == cpu]
-                df.util.plot(title='CPU {} util'.format(cpu), alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
+                df.util.plot(title='CPU {} util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 df = df_util_cfs_others[df_util_cfs_others.cpu == cpu]
-                df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
+                df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
         except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
@@ -79,23 +79,23 @@ def plot(num_rows=0, row_pos=1, threads=[]):
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df.groupby('pid').util.plot(title=thread + ' per pid util', alpha=0.75, xlim=(df_util_se.index[0], df_util_se.index[-1]))
+                df.groupby('comm').util.plot(title=thread + ' util', drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_util_se.index[0], df_util_se.index[-1]))
                 plt.grid()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 plt.title(thread + ' util per pid Histogram')
-                df.groupby('pid').util.hist(bins=100, density=False, grid=True, alpha=0.5)
+                df.groupby('comm').util.hist(bins=100, density=False, grid=True, alpha=0.5, legend=True)
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 plt.title(thread + ' cpu per pid Histogram')
-                df.groupby('pid').cpu.hist(bins=100, density=False, grid=True, alpha=0.5)
+                df.groupby('comm').cpu.hist(bins=100, density=False, grid=True, alpha=0.5, legend=True)
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 plt.title(thread + ' taskgroup per pid Histogram')
-                df.groupby('pid').path.hist(bins=100, density=False, grid=True, alpha=0.5)
+                df.groupby('comm').path.hist(bins=100, density=False, grid=True, alpha=0.5, legend=True)
         except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
