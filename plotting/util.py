@@ -22,6 +22,10 @@ def plot(num_rows=0, row_pos=1, threads=[]):
             print("Error: must specify threads in util.plot()")
             return row_pos
 
+        if not num_rows:
+            func = globals()['num_rows']
+            num_rows = func() * len(threads)
+
         try:
             df_util.ts = df_util.ts - df_util.ts[0]
             df_util.ts = df_util.ts / 1000000000

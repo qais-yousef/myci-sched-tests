@@ -11,7 +11,13 @@ def call(name, configs="") {
 				adb -s ${IPADDRESS}:${PORT} shell "mkdir -p /data/misc/perfetto-traces/myci/"
 				adb -s ${IPADDRESS}:${PORT} shell "rm -f /data/misc/perfetto-traces/myci/*.perfetto-trace"
 
-				for config in ${configs}
+				configs=${configs}
+
+				if [ "${COLLECT_PELT}" == "true" ]; then
+					configs="\$configs pelt"
+				fi
+
+				for config in \$configs
 				do
 					cat ./tools/config.pbtx.\$config >> ./tools/config.pbtx
 				done
@@ -30,7 +36,13 @@ def call(name, configs="") {
 			kill -TERM `cat perfetto.pid` || true
 			sleep 3
 
-			for config in ${configs}
+			configs=${configs}
+
+			if [ "${COLLECT_PELT}" == "true" ]; then
+				configs="\$configs pelt"
+			fi
+
+			for config in \$configs
 			do
 				cat ./tools/config.pbtx.\$config >> ./tools/config.pbtx
 			done

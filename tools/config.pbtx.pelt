@@ -5,6 +5,7 @@ data_sources: {
 
 			ftrace_events: "sched/sched_pelt_se"
 			ftrace_events: "sched/sched_pelt_cfs"
+			ftrace_events: "sched/sched_overutilized"
 
 			buffer_size_kb: 16384
 			drain_period_ms: 1000
