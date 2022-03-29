@@ -22,25 +22,25 @@ query_ou = "select ts, \
             from raw where name = 'sched_overutilized'"
 
 df_ou = None
-df_util_cfs = None
+df_pelt_cfs = None
 
 def init(trace):
 
-        global trace_util_se
-        global trace_util_cfs
+        global trace_pelt_se
+        global trace_pelt_cfs
         global trace_ou
-        trace_util_se = trace.query(query_se)
-        trace_util_cfs = trace.query(query_cfs)
+        trace_pelt_se = trace.query(query_se)
+        trace_pelt_cfs = trace.query(query_cfs)
         trace_ou = trace.query(query_ou)
 
 def num_rows(threads=[]):
 
-        global df_util_cfs
-        if df_util_cfs is None:
-            df_util_cfs = trace_util_cfs.as_pandas_dataframe()
+        global df_pelt_cfs
+        if df_pelt_cfs is None:
+            df_pelt_cfs = trace_pelt_cfs.as_pandas_dataframe()
 
         # User must multiple this with len(threads) passed to plot()
-        return 4 * len(threads) + len(df_util_cfs.cpu.unique()) * 2
+        return 4 * len(threads) + len(df_pelt_cfs.cpu.unique()) * 2
 
 def overlay_ou():
 
@@ -65,52 +65,52 @@ def overlay_ou():
 
 def plot(num_rows=0, row_pos=1, threads=[]):
 
-        df_util_se = trace_util_se.as_pandas_dataframe()
+        df_pelt_se = trace_pelt_se.as_pandas_dataframe()
 
-        global df_util_cfs
-        if df_util_cfs is None:
-            df_util_cfs = trace_util_cfs.as_pandas_dataframe()
+        global df_pelt_cfs
+        if df_pelt_cfs is None:
+            df_pelt_cfs = trace_pelt_cfs.as_pandas_dataframe()
 
         if not num_rows:
             func = globals()['num_rows']
             num_rows = func(threads)
 
         try:
-            df_util_cfs.ts = df_util_cfs.ts - df_util_cfs.ts[0]
-            df_util_cfs.ts = df_util_cfs.ts / 1000000000
-            df_util_cfs.set_index('ts', inplace=True)
+            df_pelt_cfs.ts = df_pelt_cfs.ts - df_pelt_cfs.ts[0]
+            df_pelt_cfs.ts = df_pelt_cfs.ts / 1000000000
+            df_pelt_cfs.set_index('ts', inplace=True)
 
-            df_util_cfs_root = df_util_cfs[df_util_cfs.path == '/']
-            df_util_cfs_others = df_util_cfs[df_util_cfs.path != '/']
-            for cpu in sorted(df_util_cfs.cpu.unique()):
+            df_pelt_cfs_root = df_pelt_cfs[df_pelt_cfs.path == '/']
+            df_pelt_cfs_others = df_pelt_cfs[df_pelt_cfs.path != '/']
+            for cpu in sorted(df_pelt_cfs.cpu.unique()):
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df = df_util_cfs_root[df_util_cfs_root.cpu == cpu]
-                df.util.plot(title='CPU {} util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
+                df = df_pelt_cfs_root[df_pelt_cfs_root.cpu == cpu]
+                df.util.plot(title='CPU {} util'.format(cpu), drawstyle='steps-post', alpha=0.75, xlim=(df_pelt_cfs.index[0], df_pelt_cfs.index[-1]))
                 overlay_ou()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df = df_util_cfs_others[df_util_cfs_others.cpu == cpu]
-                df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
+                df = df_pelt_cfs_others[df_pelt_cfs_others.cpu == cpu]
+                df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_pelt_cfs.index[0], df_pelt_cfs.index[-1]))
                 overlay_ou()
         except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
-            print("Error processing util.plot() for cpus:", e)
+            print("Error processing pelt.plot() for cpus:", e)
             pass
 
         try:
-            df_util_se.ts = df_util_se.ts - df_util_se.ts[0]
-            df_util_se.ts = df_util_se.ts / 1000000000
-            df_util_se.set_index('ts', inplace=True)
+            df_pelt_se.ts = df_pelt_se.ts - df_pelt_se.ts[0]
+            df_pelt_se.ts = df_pelt_se.ts / 1000000000
+            df_pelt_se.set_index('ts', inplace=True)
 
             for thread in threads:
-                df = df_util_se[df_util_se.comm.str.contains(thread)]
+                df = df_pelt_se[df_pelt_se.comm.str.contains(thread)]
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df.groupby('comm').util.plot(title=thread + ' util', drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_util_se.index[0], df_util_se.index[-1]))
+                df.groupby('comm').util.plot(title=thread + ' util', drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_pelt_se.index[0], df_pelt_se.index[-1]))
                 plt.grid()
 
                 plt.subplot(num_rows, 1, row_pos)
@@ -130,7 +130,7 @@ def plot(num_rows=0, row_pos=1, threads=[]):
         except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
-            print("Error processing util.plot() for threads:", e)
+            print("Error processing pelt.plot() for threads:", e)
             pass
 
         return row_pos

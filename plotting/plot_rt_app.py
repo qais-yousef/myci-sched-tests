@@ -2,7 +2,7 @@
 import pandas as pd
 from perfetto.trace_processor import TraceProcessor as tp
 import freq
-import util
+import pelt
 import runtime
 import table
 import os
@@ -21,7 +21,7 @@ for file in sorted(os.listdir()):
 
         trace = tp(file_path=file + '.perfetto-trace')
         freq.init(trace)
-        util.init(trace)
+        pelt.init(trace)
         runtime.init(trace)
         trace.close()
 
@@ -39,7 +39,7 @@ for file in sorted(os.listdir()):
         plt.grid()
 
         row_pos = freq.plot(num_rows=num_rows, row_pos=row_pos, cpus=[0])
-        row_pos = util.plot(num_rows=num_rows, row_pos=row_pos, threads=['thread0'])
+        row_pos = pelt.plot(num_rows=num_rows, row_pos=row_pos, threads=['thread0'])
 
         plt.subplot(num_rows, 2, row_pos * 2 - 1)
         df_result.slack.plot.hist(bins=100, alpha=1, title='slack hist')

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from perfetto.trace_processor import TraceProcessor as tp
-import util
+import pelt
 import os
 import sys
 
@@ -16,12 +16,12 @@ except:
 for file in sorted(os.listdir()):
     if file.endswith(".perfetto-trace"):
         trace = tp(file_path=file)
-        util.init(trace)
+        pelt.init(trace)
         trace.close()
 
-        num_rows = util.num_rows(threads)
+        num_rows = pelt.num_rows(threads)
 
         plt.figure(figsize=(16,3*num_rows))
-        util.plot(threads=threads)
+        pelt.plot(threads=threads)
         plt.tight_layout()
-        plt.savefig(file.replace('.perfetto-trace', '') + '_util.png')
+        plt.savefig(file.replace('.perfetto-trace', '') + '_pelt.png')
