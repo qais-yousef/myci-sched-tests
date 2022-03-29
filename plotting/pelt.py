@@ -40,7 +40,7 @@ def num_rows(threads=[]):
             df_pelt_cfs = trace_pelt_cfs.as_pandas_dataframe()
 
         # User must multiple this with len(threads) passed to plot()
-        return 3 * len(threads) + len(df_pelt_cfs.cpu.unique()) * 2
+        return 3 * len(threads) + len(df_pelt_cfs.cpu.unique()) * 2 + len(df_pelt_cfs.path.unique()) - 1
 
 def overlay_ou():
 
@@ -94,6 +94,13 @@ def plot(num_rows=0, row_pos=1, threads=[]):
                 df = df_pelt_cfs_others[df_pelt_cfs_others.cpu == cpu]
                 df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_pelt_cfs.index[0], df_pelt_cfs.index[-1]))
                 overlay_ou()
+
+            for path in sorted(df_pelt_cfs_others.path.unique()):
+                plt.subplot(num_rows, 1, row_pos)
+                row_pos += 1
+                df = df_pelt_cfs_others[df_pelt_cfs_others.path == path]
+                plt.title(path + ' CPU Histogram')
+                df.cpu.hist(bins=100, density=False, grid=True, alpha=0.5)
         except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
