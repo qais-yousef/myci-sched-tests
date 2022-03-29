@@ -32,7 +32,7 @@ def num_rows(threads=[]):
             df_util_cfs = trace_util_cfs.as_pandas_dataframe()
 
         # User must multiple this with len(threads) passed to plot()
-        return 4 * len(threads) + len(df_util_cfs.cpu.unique())
+        return 4 * len(threads) + len(df_util_cfs.cpu.unique()) * 2
 
 def plot(num_rows=0, row_pos=1, threads=[]):
 
@@ -51,12 +51,18 @@ def plot(num_rows=0, row_pos=1, threads=[]):
             df_util_cfs.ts = df_util_cfs.ts / 1000000000
             df_util_cfs.set_index('ts', inplace=True)
 
-            df_util_cfs = df_util_cfs[df_util_cfs.path == '/']
+            df_util_cfs_root = df_util_cfs[df_util_cfs.path == '/']
+            df_util_cfs_others = df_util_cfs[df_util_cfs.path != '/']
             for cpu in sorted(df_util_cfs.cpu.unique()):
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                df = df_util_cfs[df_util_cfs.cpu == cpu]
+                df = df_util_cfs_root[df_util_cfs_root.cpu == cpu]
                 df.util.plot(title='CPU {} util'.format(cpu), alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
+
+                plt.subplot(num_rows, 1, row_pos)
+                row_pos += 1
+                df = df_util_cfs_others[df_util_cfs_others.cpu == cpu]
+                df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), alpha=0.75, legend=True, xlim=(df_util_cfs.index[0], df_util_cfs.index[-1]))
         except Exception as e:
             # Most likely the trace has no util info
             # TODO: Better detect this
