@@ -19,7 +19,9 @@ for file in sorted(os.listdir()):
         util.init(trace)
         trace.close()
 
-        plt.figure(figsize=(16,16))
+        num_rows = util.num_rows(threads)
+
+        plt.figure(figsize=(16,3*num_rows))
         util.plot(threads=threads)
         plt.tight_layout()
         plt.savefig(file.replace('.perfetto-trace', '') + '_util.png')
