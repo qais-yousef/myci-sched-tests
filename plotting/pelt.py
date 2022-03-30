@@ -51,6 +51,7 @@ def overlay_ou():
             df_ou.ts = df_ou.ts / 1000000000
             df_ou.set_index('ts', inplace=True)
 
+        threshold = df_ou.index[-1] / 1000.
         start_ts = None
         i = 0
         for ou in df_ou.overutilized:
@@ -59,7 +60,9 @@ def overlay_ou():
                     start_ts = df_ou.index[i]
             else:
                 if start_ts is not None:
-                    plt.gca().axvspan(start_ts, df_ou.index[i], alpha=0.1, color='r')
+                    stop_ts = df_ou.index[i]
+                    if stop_ts - start_ts > threshold:
+                        plt.gca().axvspan(start_ts, stop_ts, alpha=0.1, color='r')
                     start_ts = None
             i += 1
 
