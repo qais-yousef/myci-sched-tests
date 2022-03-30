@@ -125,12 +125,12 @@ def plot(num_rows=0, row_pos=1, threads=[]):
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                plt.title(thread + ' util per pid Histogram')
+                plt.title(thread + ' util Histogram')
                 df.groupby('comm').util.hist(bins=100, density=False, grid=True, alpha=0.5, legend=True)
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
-                plt.title(thread + ' cpu per pid Histogram')
+                plt.title(thread + ' CPU Histogram')
                 df.groupby('comm').cpu.hist(bins=100, density=False, grid=True, alpha=0.5, legend=True)
         except Exception as e:
             # Most likely the trace has no util info
