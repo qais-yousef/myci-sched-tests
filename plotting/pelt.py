@@ -90,12 +90,14 @@ def plot(num_rows=0, row_pos=1, threads=[]):
                 row_pos += 1
                 df = df_pelt_cfs_root[df_pelt_cfs_root.cpu == cpu]
                 df.util.plot(title='CPU {} util'.format(cpu), drawstyle='steps-post', alpha=0.75, xlim=(df_pelt_cfs.index[0], df_pelt_cfs.index[-1]))
+                plt.grid()
                 overlay_ou()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 df = df_pelt_cfs_others[df_pelt_cfs_others.cpu == cpu]
                 df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_pelt_cfs.index[0], df_pelt_cfs.index[-1]))
+                plt.grid()
                 overlay_ou()
 
             for path in sorted(df_pelt_cfs_others.path.unique()):
