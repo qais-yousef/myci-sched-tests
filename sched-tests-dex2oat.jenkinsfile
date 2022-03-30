@@ -5,6 +5,7 @@ pipeline {
 		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Android based DUT.')
 		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
 		booleanParam(name: 'COLLECT_PELT', defaultValue: false, description: 'Collect PELT data and produce plots')
+		booleanParam(name: 'COLLECT_UCLAMP', defaultValue: false, description: 'Collect UCLAMP data and produce plots')
 		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
 		string(name: 'ITERATIONS', defaultValue: '10', description: 'Number of iterations to run')
 		string(name: 'DELAY', defaultValue: '10', description: 'Time in seconds to wait between each run.')
@@ -19,7 +20,7 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${MYCI_BRANCH}"
-				verify_params(!env.COLLECT_PELT)
+				verify_params(!env.COLLECT_PELT || !env.COLLECT_UCLAMP)
 				set_description()
 			}
 		}
@@ -50,6 +51,7 @@ pipeline {
 				plot_power()
 				plot_jank()
 				plot_pelt(env.COLLECT_PELT == 'true', "dex2oat")
+				plot_uclamp(env.COLLECT_UCLAMP == 'true', "dex2oat")
 			}
 		}
 		stage('Archive') {

@@ -14,7 +14,11 @@ def call(name, configs="") {
 				configs=${configs}
 
 				if [ "${COLLECT_PELT}" == "true" ]; then
-					configs="\$configs pelt uclamp"
+					configs="\$configs pelt"
+				fi
+
+				if [ "${COLLECT_UCLAMP}" == "true" ]; then
+					configs="\$configs uclamp"
 				fi
 
 				for config in \$configs
@@ -39,7 +43,11 @@ def call(name, configs="") {
 			configs=${configs}
 
 			if [ "${COLLECT_PELT}" == "true" ]; then
-				configs="\$configs pelt uclamp"
+				configs="\$configs pelt"
+			fi
+
+			if [ "${COLLECT_UCLAMP}" == "true" ]; then
+				configs="\$configs uclamp"
 			fi
 
 			for config in \$configs
