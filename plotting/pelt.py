@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import pandas as pd
 import matplotlib.pyplot as plt
+import text
 
 query_se = "select ts, \
             EXTRACT_ARG(arg_set_id, 'cpu') as cpu, \
@@ -53,6 +54,7 @@ def overlay_ou():
 
         threshold = df_ou.index[-1] / 1000.
         start_ts = None
+        total_ou = 0
         i = 0
         for ou in df_ou.overutilized:
             if ou:
@@ -61,10 +63,13 @@ def overlay_ou():
             else:
                 if start_ts is not None:
                     stop_ts = df_ou.index[i]
+                    total_ou += (stop_ts - start_ts)
                     if stop_ts - start_ts > threshold:
                         plt.gca().axvspan(start_ts, stop_ts, alpha=0.1, color='r')
                     start_ts = None
             i += 1
+
+        text.plot(0.01, 1.10, "OU: {:,.2f}%".format(total_ou * 100. / (df_ou.index[-1] - df_ou.index[0])))
 
 def plot(num_rows=0, row_pos=1, threads=[]):
 
