@@ -51,7 +51,7 @@ def overlay_ou():
             df_ou.ts = df_ou.ts / 1000000000
             df_ou.set_index('ts', inplace=True)
 
-        threshold = 0 # df_ou.index[-1] / 1000.
+        threshold = df_ou.index[-1] / 1000.
         start_ts = None
         i = 0
         for ou in df_ou.overutilized:
