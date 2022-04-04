@@ -24,6 +24,7 @@ query_ou = "select ts, \
 
 df_ou = None
 df_pelt_cfs = None
+unique_groups = None
 
 def init(trace):
 
@@ -40,8 +41,19 @@ def num_rows(threads=[]):
         if df_pelt_cfs is None:
             df_pelt_cfs = trace_pelt_cfs.as_pandas_dataframe()
 
+        global unique_groups
+        if unique_groups is None:
+            df = df_pelt_cfs[~df_pelt_cfs.path.str.contains('autogroup')]
+            df = df[df.path != '/']
+            unique_groups = sorted(df.path.unique())
+
+        if len(unique_groups):
+            cpus_multiplier = 2
+        else:
+            cpus_multiplier = 1
+
         # User must multiple this with len(threads) passed to plot()
-        return 3 * len(threads) + len(df_pelt_cfs.cpu.unique()) * 2 + len(df_pelt_cfs.path.unique()) - 1
+        return 3 * len(threads) + len(df_pelt_cfs.cpu.unique()) * cpus_multiplier + len(unique_groups)
 
 def overlay_ou():
 
@@ -79,6 +91,12 @@ def plot(num_rows=0, row_pos=1, threads=[]):
         if df_pelt_cfs is None:
             df_pelt_cfs = trace_pelt_cfs.as_pandas_dataframe()
 
+        global unique_groups
+        if unique_groups is None:
+            df = df_pelt_cfs[~df_pelt_cfs.path.str.contains('autogroup')]
+            df = df[df.path != '/']
+            unique_groups = sorted(df.path.unique())
+
         if not num_rows:
             func = globals()['num_rows']
             num_rows = func(threads)
@@ -89,7 +107,7 @@ def plot(num_rows=0, row_pos=1, threads=[]):
             df_pelt_cfs.set_index('ts', inplace=True)
 
             df_pelt_cfs_root = df_pelt_cfs[df_pelt_cfs.path == '/']
-            df_pelt_cfs_others = df_pelt_cfs[df_pelt_cfs.path != '/']
+            df_pelt_cfs_others = df_pelt_cfs[df_pelt_cfs.path.isin(unique_groups)]
             for cpu in sorted(df_pelt_cfs.cpu.unique()):
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
@@ -98,14 +116,15 @@ def plot(num_rows=0, row_pos=1, threads=[]):
                 plt.grid()
                 overlay_ou()
 
-                plt.subplot(num_rows, 1, row_pos)
-                row_pos += 1
-                df = df_pelt_cfs_others[df_pelt_cfs_others.cpu == cpu]
-                df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_pelt_cfs.index[0], df_pelt_cfs.index[-1]))
-                plt.grid()
-                overlay_ou()
+                if not df_pelt_cfs_others.empty:
+                    plt.subplot(num_rows, 1, row_pos)
+                    row_pos += 1
+                    df = df_pelt_cfs_others[df_pelt_cfs_others.cpu == cpu]
+                    df.groupby('path').util.plot(title='CPU {} taskgroup util'.format(cpu), drawstyle='steps-post', alpha=0.75, legend=True, xlim=(df_pelt_cfs.index[0], df_pelt_cfs.index[-1]))
+                    plt.grid()
+                    overlay_ou()
 
-            for path in sorted(df_pelt_cfs_others.path.unique()):
+            for path in unique_groups:
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 df = df_pelt_cfs_others[df_pelt_cfs_others.path == path]
