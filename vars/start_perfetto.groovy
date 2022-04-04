@@ -1,4 +1,12 @@
 def call(name, configs="") {
+	if (!env.COLLECT_PELT) {
+		env.COLLECT_PELT = 'false'
+	}
+
+	if (!env.COLLECT_UCLAMP) {
+		env.COLLECT_UCLAMP = 'false'
+	}
+
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
 		if (env.IPADDRESS && env.PORT) {
