@@ -12,8 +12,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 
-num_rows=9
-
 for file in sorted(os.listdir()):
     if file.endswith(".csv"):
         file = file.replace('.csv', '')
@@ -25,8 +23,10 @@ for file in sorted(os.listdir()):
         runtime.init(trace)
         trace.close()
 
+        threads = ['thread0']
+        num_rows = freq.num_rows() + pelt.num_rows(threads=threads)
 
-        plt.figure(figsize=(16,16))
+        plt.figure(figsize=(16,3*num_rows))
         row_pos = 1
 
         plt.subplot(num_rows, 1, row_pos)
@@ -39,7 +39,7 @@ for file in sorted(os.listdir()):
         plt.grid()
 
         row_pos = freq.plot(num_rows=num_rows, row_pos=row_pos, cpus=[0])
-        row_pos = pelt.plot(num_rows=num_rows, row_pos=row_pos, threads=['thread0'])
+        row_pos = pelt.plot(num_rows=num_rows, row_pos=row_pos, threads=threads)
 
         plt.subplot(num_rows, 2, row_pos * 2 - 1)
         df_result.slack.plot.hist(bins=100, alpha=1, title='slack hist')
@@ -49,7 +49,7 @@ for file in sorted(os.listdir()):
         plt.grid()
         row_pos += 1
 
-        row_pos = runtime.plot(num_rows=num_rows, row_pos=row_pos, threads=['thread0'])
+        row_pos = runtime.plot(num_rows=num_rows, row_pos=row_pos, threads=threads)
 
         row_pos = table.subplot(df_result, num_rows=num_rows, row_pos=row_pos)
 
