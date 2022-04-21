@@ -1,5 +1,5 @@
 def call(agenda) {
 	sh """
-		wa run ${agenda}
+		wa run ${agenda} -f
 	"""
 }
