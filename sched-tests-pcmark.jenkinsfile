@@ -4,6 +4,8 @@ pipeline {
 	parameters {
 		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Android based DUT.')
 		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+		booleanParam(name: 'COLLECT_PELT', defaultValue: false, description: 'Collect PELT data and produce plots')
+		booleanParam(name: 'COLLECT_UCLAMP', defaultValue: false, description: 'Collect UCLAMP data and produce plots')
 		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
 		booleanParam(name: 'RUN_DEX2OAT', defaultValue: false, description: "Run JIT compilation of all apps as a noisy background activity while running the test. We'll honour the specified ITERATIONS and DELAY params.")
 		string(name: 'ITERATIONS', defaultValue: '10', description: 'Number of iterations to run')
@@ -18,7 +20,7 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${MYCI_BRANCH}"
-				verify_params()
+				verify_params(!env.COLLECT_PELT || !env.COLLECT_UCLAMP)
 				set_description()
 			}
 		}
@@ -66,6 +68,8 @@ pipeline {
 			steps {
 				plot_wa_results(params.NODE, "pcmark")
 				plot_jank()
+				plot_pelt(env.COLLECT_PELT == 'true', "pcmark")
+				plot_uclamp(env.COLLECT_UCLAMP == 'true', "pcmark")
 			}
 		}
 		stage('tar wa_output') {
