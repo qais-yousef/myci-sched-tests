@@ -1,50 +1,41 @@
 pipeline {
-	agent { label params.NODE }
+	agent any
+
+	parameters {
+		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Android based DUT.')
+		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
+		string(name: 'ITERATIONS', defaultValue: '10', description: 'Number of iterations to run')
+		string(name: 'DELAY', defaultValue: '10', description: 'Time in seconds to wait between each run.')
+		string(name: 'QUIET_PERIOD', defaultValue: '1200', description: 'Time in seconds to wait between each _test_ to avoid heating the system.')
+	}
+
+	environment {
+		MYCI_BRANCH = "${BRANCH}"
+	}
 
 	stages {
-		stage('Connect') {
+		stage('Init') {
 			steps {
-				verify_android()
-				connect()
+				library "sched-tests-utils@${MYCI_BRANCH}"
+				verify_params(!env.QUIET_PERIOD)
+				set_description()
 			}
 		}
-		stage('Prepare Agenda') {
+		stage('Speedometer') {
 			steps {
-				fixup_agenda("agendas/pcmark.yaml", "ITERATIONS", 1)
-				fixup_agenda("agendas/pcmark.yaml", "DELAY", 0)
-				fixup_agenda("agendas/pcmark.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
-			}
-		}
-		stage('PCMark-WA') {
-			steps {
-				start_perfetto()
-				run_wa("agendas/pcmark.yaml")
-				stop_perfetto("pcmark")
-			}
-		}
-		stage('Generate Plots') {
-			steps {
-				plot_wa_power(params.NODE, "pcmark")
-				plot_wa_results(params.NODE, "pcmark")
-			}
-		}
-		stage('tar wa_output') {
-			steps {
-				tar_wa_output()
+				build_android_job('sched-tests-speedometer', 0, false)
 			}
 		}
 		stage('Archive') {
 			steps {
-				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
-				archiveArtifacts artifacts: '*.png', followSymlinks: false
-				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
+				archiveArtifacts artifacts: '**/*.png', followSymlinks: false, allowEmptyArchive: true
 			}
 		}
 	}
 	post {
 		always {
 			cleanWs()
-			disconnect()
 		}
 	}
 }
