@@ -33,7 +33,20 @@ def call() {
 				#
 				# We are ready, pull!
 				#
-				adb -s ${IPADDRESS}:${PORT} pull \$TRACE_F
+				retry=5
+				for i in \$(seq \$retry)
+				do
+					if [ \$i -eq \$retry ]; then
+						# Make sure to propagate the failure on last retry
+						adb -s ${IPADDRESS}:${PORT} pull \$TRACE_F
+					else
+						adb -s ${IPADDRESS}:${PORT} pull \$TRACE_F || true
+					fi
+
+					if [ -e \$(ls *.perfetto-trace) ]; then
+						break
+					fi
+				done
 
 				#
 				# Don't leave leftovers..
