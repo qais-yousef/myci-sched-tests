@@ -22,9 +22,34 @@ pipeline {
 				set_description()
 			}
 		}
+		stage('Dex2oat') {
+			steps {
+				build_android_job('sched-tests-dex2oat', 0, false)
+			}
+		}
 		stage('Speedometer') {
 			steps {
-				build_android_job('sched-tests-speedometer', 0, false)
+				build_android_job('sched-tests-speedometer', params.QUIET_PERIOD, false)
+			}
+		}
+		stage('Speedometer + Dex2oat') {
+			steps {
+				build_android_job('sched-tests-speedometer', params.QUIET_PERIOD, true)
+			}
+		}
+		stage('PCMark') {
+			steps {
+				build_android_job('sched-tests-pcmark', params.QUIET_PERIOD, false)
+			}
+		}
+		stage('PCMark + Dex2oat') {
+			steps {
+				build_android_job('sched-tests-pcmark', params.QUIET_PERIOD, true)
+			}
+		}
+		stage('Geekbench') {
+			steps {
+				build_android_job('sched-tests-geekbench', params.QUIET_PERIOD, false)
 			}
 		}
 		stage('Archive') {
