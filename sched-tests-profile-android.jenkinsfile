@@ -5,7 +5,7 @@ pipeline {
 		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on. Must be Android based DUT.')
 		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
 		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
-		string(name: 'ITERATIONS', defaultValue: '10', description: 'Number of iterations to run')
+		string(name: 'ITERATIONS', defaultValue: '3', description: 'Number of iterations to run')
 		string(name: 'DELAY', defaultValue: '10', description: 'Time in seconds to wait between each run.')
 		string(name: 'QUIET_PERIOD', defaultValue: '1200', description: 'Time in seconds to wait between each _test_ to avoid heating the system.')
 	}

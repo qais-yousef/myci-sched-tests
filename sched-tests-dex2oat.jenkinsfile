@@ -7,7 +7,7 @@ pipeline {
 		booleanParam(name: 'COLLECT_PELT', defaultValue: false, description: 'Collect PELT data and produce plots')
 		booleanParam(name: 'COLLECT_UCLAMP', defaultValue: false, description: 'Collect UCLAMP data and produce plots')
 		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
-		string(name: 'ITERATIONS', defaultValue: '10', description: 'Number of iterations to run')
+		string(name: 'ITERATIONS', defaultValue: '3', description: 'Number of iterations to run')
 		string(name: 'DELAY', defaultValue: '10', description: 'Time in seconds to wait between each run.')
 	}
 
