@@ -43,9 +43,11 @@ def call() {
 						adb -s ${IPADDRESS}:${PORT} pull \$TRACE_F || true
 					fi
 
-					if [ -e \$(ls *.perfetto-trace) ]; then
+					if [ -e *.perfetto-trace ]; then
 						break
 					fi
+
+					sleep 3
 				done
 
 				#
