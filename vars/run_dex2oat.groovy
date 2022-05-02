@@ -9,6 +9,11 @@ def call(iterations, delay) {
 					echo "Waiting ${delay}s before starting..."
 					sleep ${delay}
 
+					# Swipe up to ensure the screen stays on
+					# We can easily exceed 30mins timeout if number of iterations is 5
+					# on some systems for instance.
+					adb -s ${IPADDRESS}:${PORT} shell input touchscreen swipe 200 800 200 700
+
 					adb -s ${IPADDRESS}:${PORT} shell -x 'cmd package compile -m speed-profile -f -a'
 				done
 			"""
