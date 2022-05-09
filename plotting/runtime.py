@@ -2,34 +2,44 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-query = "select ts, EXTRACT_ARG(arg_set_id, 'comm'), EXTRACT_ARG(arg_set_id, 'runtime'), EXTRACT_ARG(arg_set_id, 'vruntime') from raw where name = 'sched_stat_runtime'"
+query = "select ts, EXTRACT_ARG(arg_set_id, 'comm') as comm, EXTRACT_ARG(arg_set_id, 'runtime') as runtime, EXTRACT_ARG(arg_set_id, 'vruntime') as vruntime from raw where name = 'sched_stat_runtime'"
+
+df_runtime = None
 
 def init(trace):
 
         global trace_runtime
         trace_runtime = trace.query(query)
 
+def __init():
+
+        global df_runtime
+        if df_runtime is None:
+            df_runtime = trace_runtime.as_pandas_dataframe()
+            df_runtime.ts = df_runtime.ts - df_runtime.ts[0]
+            df_runtime.ts = df_runtime.ts / 1000000000
+            df_runtime.set_index('ts', inplace=True)
+
 def num_rows():
 
         # User must multiple this with len(threads) passed to plot()
         return 2
 
+def save_csv(prefix):
+
+        __init()
+
+        df_runtime.to_csv(prefix + '_runtime.csv')
+
 def plot(num_rows=0, row_pos=1, threads=[]):
 
-        df_runtime = trace_runtime.as_pandas_dataframe()
+        __init()
 
         if not len(threads):
             print("Error: must specify threads in runtime.plot()")
             return row_pos
 
         try:
-            df_runtime.ts = df_runtime.ts - df_runtime.ts[0]
-            df_runtime.ts = df_runtime.ts / 1000000000
-            df_runtime.set_index('ts', inplace=True)
-
-            df_runtime.columns = df_runtime.columns.str.replace('EXTRACT_ARG\(arg_set_id, \'', '', regex=True)
-            df_runtime.columns = df_runtime.columns.str.replace('\'\)', '', regex=True)
-
             for thread in threads:
                 df_runtime = df_runtime[df_runtime.comm.str.contains(thread)]
 

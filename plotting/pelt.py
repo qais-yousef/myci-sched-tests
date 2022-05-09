@@ -24,6 +24,7 @@ query_ou = "select ts, \
 
 df_ou = None
 df_pelt_cfs = None
+df_pelt_se = None
 unique_groups = None
 
 def init(trace):
@@ -35,17 +36,38 @@ def init(trace):
         trace_pelt_cfs = trace.query(query_cfs)
         trace_ou = trace.query(query_ou)
 
-def num_rows(threads=[]):
+def __init():
 
         global df_pelt_cfs
         if df_pelt_cfs is None:
             df_pelt_cfs = trace_pelt_cfs.as_pandas_dataframe()
+            df_pelt_cfs.ts = df_pelt_cfs.ts - df_pelt_cfs.ts[0]
+            df_pelt_cfs.ts = df_pelt_cfs.ts / 1000000000
+            df_pelt_cfs.set_index('ts', inplace=True)
 
         global unique_groups
         if unique_groups is None:
             df = df_pelt_cfs[~df_pelt_cfs.path.str.contains('autogroup')]
             df = df[df.path != '/']
             unique_groups = sorted(df.path.unique())
+
+        global df_pelt_se
+        if df_pelt_se is None:
+            df_pelt_se = trace_pelt_se.as_pandas_dataframe()
+            df_pelt_se.ts = df_pelt_se.ts - df_pelt_se.ts[0]
+            df_pelt_se.ts = df_pelt_se.ts / 1000000000
+            df_pelt_se.set_index('ts', inplace=True)
+
+        global df_ou
+        if df_ou is None:
+            df_ou = trace_ou.as_pandas_dataframe()
+            df_ou.ts = df_ou.ts - df_ou.ts[0]
+            df_ou.ts = df_ou.ts / 1000000000
+            df_ou.set_index('ts', inplace=True)
+
+def num_rows(threads=[]):
+
+        __init()
 
         if len(unique_groups):
             cpus_multiplier = 2
@@ -57,12 +79,7 @@ def num_rows(threads=[]):
 
 def overlay_ou():
 
-        global df_ou
-        if df_ou is None:
-            df_ou = trace_ou.as_pandas_dataframe()
-            df_ou.ts = df_ou.ts - df_ou.ts[0]
-            df_ou.ts = df_ou.ts / 1000000000
-            df_ou.set_index('ts', inplace=True)
+        __init()
 
         threshold = 0 # df_ou.index[-1] / 1000.
         start_ts = None
@@ -83,29 +100,23 @@ def overlay_ou():
 
         text.plot(0.01, 1.10, "OU: {:,.2f}%".format(total_ou * 100. / (df_ou.index[-1] - df_ou.index[0])))
 
+def save_csv(prefix):
+
+        __init()
+
+        df_pelt_cfs.to_csv(prefix + '_pelt_cfs.csv')
+        df_pelt_se.to_csv(prefix + '_pelt_se.csv')
+        df_ou.to_csv(prefix + '_overutilized.csv')
+
 def plot(num_rows=0, row_pos=1, threads=[]):
 
-        df_pelt_se = trace_pelt_se.as_pandas_dataframe()
-
-        global df_pelt_cfs
-        if df_pelt_cfs is None:
-            df_pelt_cfs = trace_pelt_cfs.as_pandas_dataframe()
-
-        global unique_groups
-        if unique_groups is None:
-            df = df_pelt_cfs[~df_pelt_cfs.path.str.contains('autogroup')]
-            df = df[df.path != '/']
-            unique_groups = sorted(df.path.unique())
+        __init()
 
         if not num_rows:
             func = globals()['num_rows']
             num_rows = func(threads)
 
         try:
-            df_pelt_cfs.ts = df_pelt_cfs.ts - df_pelt_cfs.ts[0]
-            df_pelt_cfs.ts = df_pelt_cfs.ts / 1000000000
-            df_pelt_cfs.set_index('ts', inplace=True)
-
             df_pelt_cfs_root = df_pelt_cfs[df_pelt_cfs.path == '/']
             df_pelt_cfs_others = df_pelt_cfs[df_pelt_cfs.path.isin(unique_groups)]
             for cpu in sorted(df_pelt_cfs.cpu.unique()):
@@ -137,10 +148,6 @@ def plot(num_rows=0, row_pos=1, threads=[]):
             pass
 
         try:
-            df_pelt_se.ts = df_pelt_se.ts - df_pelt_se.ts[0]
-            df_pelt_se.ts = df_pelt_se.ts / 1000000000
-            df_pelt_se.set_index('ts', inplace=True)
-
             for thread in threads:
                 df = df_pelt_se[df_pelt_se.comm.str.contains(thread)]
 

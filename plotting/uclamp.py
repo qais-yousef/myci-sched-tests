@@ -21,6 +21,7 @@ query_cfs = "select ts, \
             from raw where name = 'uclamp_util_cfs'"
 
 df_uclamp_cfs = None
+df_uclamp_se = None
 
 def init(trace):
 
@@ -29,32 +30,45 @@ def init(trace):
         trace_uclamp_se = trace.query(query_se)
         trace_uclamp_cfs = trace.query(query_cfs)
 
-def num_rows(threads=[]):
+def __init():
 
         global df_uclamp_cfs
         if df_uclamp_cfs is None:
             df_uclamp_cfs = trace_uclamp_cfs.as_pandas_dataframe()
+            df_uclamp_cfs.ts = df_uclamp_cfs.ts - df_uclamp_cfs.ts[0]
+            df_uclamp_cfs.ts = df_uclamp_cfs.ts / 1000000000
+            df_uclamp_cfs.set_index('ts', inplace=True)
+
+        global df_uclamp_se
+        if df_uclamp_se is None:
+            df_uclamp_se = trace_uclamp_se.as_pandas_dataframe()
+            df_uclamp_se.ts = df_uclamp_se.ts - df_uclamp_se.ts[0]
+            df_uclamp_se.ts = df_uclamp_se.ts / 1000000000
+            df_uclamp_se.set_index('ts', inplace=True)
+
+def num_rows(threads=[]):
+
+        __init()
 
         # User must multiple this with len(threads) passed to plot()
         return 4 * len(threads) + len(df_uclamp_cfs.cpu.unique()) * 2
 
+def save_csv(prefix):
+
+        __init()
+
+        df_uclamp_cfs.to_csv(prefix + '_uclamp_cfs.csv')
+        df_uclamp_se.to_csv(prefix + '_uclamp_se.csv')
+
 def plot(num_rows=0, row_pos=1, threads=[]):
 
-        df_uclamp_se = trace_uclamp_se.as_pandas_dataframe()
-
-        global df_uclamp_cfs
-        if df_uclamp_cfs is None:
-            df_uclamp_cfs = trace_uclamp_cfs.as_pandas_dataframe()
+        __init()
 
         if not num_rows:
             func = globals()['num_rows']
             num_rows = func(threads)
 
         try:
-            df_uclamp_cfs.ts = df_uclamp_cfs.ts - df_uclamp_cfs.ts[0]
-            df_uclamp_cfs.ts = df_uclamp_cfs.ts / 1000000000
-            df_uclamp_cfs.set_index('ts', inplace=True)
-
             for cpu in sorted(df_uclamp_cfs.cpu.unique()):
                 df = df_uclamp_cfs[df_uclamp_cfs.cpu == cpu]
 
@@ -76,10 +90,6 @@ def plot(num_rows=0, row_pos=1, threads=[]):
             pass
 
         try:
-            df_uclamp_se.ts = df_uclamp_se.ts - df_uclamp_se.ts[0]
-            df_uclamp_se.ts = df_uclamp_se.ts / 1000000000
-            df_uclamp_se.set_index('ts', inplace=True)
-
             for thread in threads:
                 df = df_uclamp_se[df_uclamp_se.comm.str.contains(thread)]
 

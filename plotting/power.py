@@ -8,6 +8,8 @@ query_charge = "select ts, value as charge_uah from counter as c left join count
 query_current = "select ts, value as current_ua from counter as c left join counter_track t on c.track_id = t.id where t.name = 'batt.current_ua'"
 query_power = "select ts, t.name as rail, value as energy from counter as c left join counter_track t on c.track_id = t.id where t.name like 'power.rails.cpu.%'"
 
+df_power = None
+
 def init(trace):
 
         global trace_charge
@@ -17,28 +19,37 @@ def init(trace):
         trace_current = trace.query(query_current)
         trace_power = trace.query(query_power)
 
-        global df_power
-        df_power = None
-
-def num_rows():
+def __init():
 
         global df_power
         if df_power is None:
             df_power = trace_power.as_pandas_dataframe()
+            df_power.ts = df_power.ts - df_power.ts[0]
+            df_power.ts = df_power.ts / 1000000000
+            df_power['_ts'] = df_power.ts
+            df_power.set_index('ts', inplace=True)
+
+def num_rows():
+
+        __init()
 
         if df_power.empty:
             return 2
         else:
             return len(df_power.rail.unique()) * 2 + 2
 
+def save_csv(prefix):
+
+        __init()
+
+        df_power.to_csv(prefix + '_power.csv')
+
 def plot(num_rows=0, row_pos=1):
+
+        __init()
 
         df_current = trace_current.as_pandas_dataframe()
         df_charge = trace_charge.as_pandas_dataframe()
-
-        global df_power
-        if df_power is None:
-            df_power = trace_power.as_pandas_dataframe()
 
         if not num_rows:
             func = globals()['num_rows']
@@ -83,11 +94,6 @@ def plot(num_rows=0, row_pos=1):
             pass
 
         try:
-            df_power.ts = df_power.ts - df_power.ts[0]
-            df_power.ts = df_power.ts / 1000000000
-            df_power['_ts'] = df_power.ts
-            df_power.set_index('ts', inplace=True)
-
             df_power['duration'] = pd.Series()
             df_power['energy_diff'] = pd.Series()
             df_power['power'] = pd.Series()

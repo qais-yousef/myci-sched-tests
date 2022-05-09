@@ -6,33 +6,18 @@ import text
 
 query = "select ts, cpu, value as idle from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpuidle'"
 
+df_idle = None
+
 def init(trace):
 
         global trace_idle
         trace_idle = trace.query(query)
 
-        global df_idle
-        df_idle = None
-
-def num_rows():
+def __init():
 
         global df_idle
         if df_idle is None:
             df_idle = trace_idle.as_pandas_dataframe()
-
-        return int((len(df_idle.cpu.unique()) + 3) / 4)
-
-def plot(num_rows=0, row_pos=1, cpus=[]):
-
-        global df_idle
-        if df_idle is None:
-            df_idle = trace_idle.as_pandas_dataframe()
-
-        if not num_rows:
-            func = globals()['num_rows']
-            num_rows = func()
-
-        try:
             df_idle.ts = df_idle.ts - df_idle.ts[0]
             df_idle.ts = df_idle.ts / 1000000000
             df_idle['_ts'] = df_idle.ts
@@ -41,8 +26,28 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
             # This magic value is exit from idle. Values 0 and above are idle
             # states
             df_idle.idle.replace(4294967295, -1, inplace=True)
-            df_idle.idle = df_idle.idle + 1
 
+def num_rows():
+
+        __init()
+
+        return int((len(df_idle.cpu.unique()) + 3) / 4)
+
+def save_csv(prefix):
+
+        __init()
+
+        df_idle.to_csv(prefix + '_idle.csv')
+
+def plot(num_rows=0, row_pos=1, cpus=[]):
+
+        __init()
+
+        if not num_rows:
+            func = globals()['num_rows']
+            num_rows = func()
+
+        try:
             nr_cpus = len(df_idle.cpu.unique())
 
             col = 0

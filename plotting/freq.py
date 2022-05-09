@@ -5,21 +5,17 @@ import matplotlib.pyplot as plt
 
 query = "select ts, cpu, value as freq from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpufreq'"
 
+df_freq = None
+clusters = None
+
 def init(trace):
 
         global trace_freq
         trace_freq = trace.query(query)
 
-        global df_freq
-        df_freq = None
+def __find_clusters():
 
         global clusters
-        clusters = None
-
-def find_clusters():
-
-        global clusters
-
         if clusters:
             return
 
@@ -36,31 +32,36 @@ def find_clusters():
             df_freq_cpu = df_freq[df_freq.cpu == cpu]
             clusters.append(cpu)
 
-def num_rows():
+def __init():
 
         global df_freq
         if df_freq is None:
             df_freq = trace_freq.as_pandas_dataframe()
-
-        find_clusters()
-
-        return len(clusters) * 2
-
-def plot(num_rows=0, row_pos=1, cpus=[]):
-
-        global df_freq
-        if df_freq is None:
-            df_freq = trace_freq.as_pandas_dataframe()
-
-        try:
             df_freq.ts = df_freq.ts - df_freq.ts[0]
             df_freq.ts = df_freq.ts / 1000000000
             df_freq['_ts'] = df_freq.ts
             df_freq.freq = df_freq.freq / 1000000
             df_freq.set_index('ts', inplace=True)
 
-            find_clusters()
+        __find_clusters()
 
+def num_rows():
+
+        __init()
+
+        return len(clusters) * 2
+
+def save_csv(prefix):
+
+        __init()
+
+        df_freq.to_csv(prefix + '_freq.csv')
+
+def plot(num_rows=0, row_pos=1, cpus=[]):
+
+        __init()
+
+        try:
             color = ['b', 'y', 'r']
             i = 0
             for cpu in clusters:

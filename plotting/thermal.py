@@ -7,6 +7,8 @@ query = "select ts, name, value as temperature from counter as c left join count
 
 names = ["BIG Temperature", "MID Temperature", "LITTLE Temperature"]
 
+df_thermal = None
+
 def init(trace):
 
         global trace_thermal
@@ -20,19 +22,11 @@ def init(trace):
 
         trace_thermal = trace.query(query.format(condition))
 
-def num_rows():
+def __init():
 
-        return len(names) * 2
-
-def plot(num_rows=0, row_pos=1):
-
-        df_thermal = trace_thermal.as_pandas_dataframe()
-
-        if not num_rows:
-            func = globals()['num_rows']
-            num_rows = func()
-
-        try:
+        global df_thermal
+        if df_thermal is None:
+            df_thermal = trace_thermal.as_pandas_dataframe()
             df_thermal.ts = df_thermal.ts - df_thermal.ts[0]
             df_thermal.ts = df_thermal.ts / 1000000000
             df_thermal['_ts'] = df_thermal.ts
@@ -40,6 +34,25 @@ def plot(num_rows=0, row_pos=1):
 
             df_thermal.temperature = df_thermal.temperature / 1000
 
+def num_rows():
+
+        return len(names) * 2
+
+def save_csv(prefix):
+
+        __init()
+
+        df_thermal.to_csv(prefix + '_thermal.csv')
+
+def plot(num_rows=0, row_pos=1):
+
+        __init()
+
+        if not num_rows:
+            func = globals()['num_rows']
+            num_rows = func()
+
+        try:
             color = ['r', 'y', 'b']
             i = 0
             for name in names:

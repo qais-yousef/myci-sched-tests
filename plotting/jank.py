@@ -8,53 +8,53 @@ import text
 query = "select ts, dur, surface_frame_token as app_token, display_frame_token, " \
     "jank_type, on_time_finish, present_type, layer_name, process.name from actual_frame_timeline_slice left join process using(upid)"
 
+df_jank = None
+processes = None
+
 def init(trace):
 
         global trace_jank
         trace_jank = trace.query(query)
 
-        global df_jank
-        df_jank = None
-
-        global processes
-        processes = None
-
-def num_rows():
+def __init():
 
         global df_jank
         if df_jank is None:
             df_jank = trace_jank.as_pandas_dataframe()
-
-        if df_jank.empty:
-            return 0
-
-        global processes
-        if processes is None:
-            processes = sorted(df_jank.name.unique())
-
-        return len(processes) * 3
-
-def plot(num_rows=0, row_pos=1, names=[]):
-
-        global df_jank
-        if df_jank is None:
-            df_jank = trace_jank.as_pandas_dataframe()
-
-        global processes
-        if processes is None:
-            processes = sorted(df_jank.name.unique())
-
-        if not num_rows:
-            func = globals()['num_rows']
-            num_rows = func()
-
-        try:
             df_jank.ts = df_jank.ts - df_jank.ts[0]
             df_jank.ts = df_jank.ts / 1000000000
             df_jank['_ts'] = df_jank.ts
             df_jank.dur = df_jank.dur / 1000000
             df_jank.set_index('ts', inplace=True)
 
+        global processes
+        if processes is None:
+            processes = sorted(df_jank.name.unique())
+
+def num_rows():
+
+        __init()
+
+        if df_jank.empty:
+            return 0
+
+        return len(processes) * 3
+
+def save_csv(prefix):
+
+        __init()
+
+        df_jank.to_csv(prefix + '_jank.csv')
+
+def plot(num_rows=0, row_pos=1, names=[]):
+
+        __init()
+
+        if not num_rows:
+            func = globals()['num_rows']
+            num_rows = func()
+
+        try:
             for name in processes:
                 if len(names):
                     if name not in names:
