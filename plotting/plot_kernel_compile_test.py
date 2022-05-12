@@ -18,11 +18,16 @@ for file in sorted(os.listdir()):
         trace.close()
 
         plt.figure(figsize=(16,16))
+
         num_rows = freq.num_rows() + pelt.num_rows()
         row_pos = 1
 
         row_pos = pelt.plot(num_rows=num_rows, row_pos=row_pos, threads=['make'])
         row_pos = freq.plot(num_rows=num_rows, row_pos=row_pos)
+
+        prefix = file.replace('.perfetto-trace', '')
+        pelt.save_csv(prefix)
+        freq.save_csv(prefix)
 
         plt.tight_layout()
         plt.savefig('kernel_compile_time_result.png')

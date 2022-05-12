@@ -14,6 +14,11 @@ for file in sorted(os.listdir()):
         trace.close()
 
         plt.figure(figsize=(16,3*jank.num_rows()))
+
+        prefix = file.replace('.perfetto-trace', '')
+
         jank.plot()
+        jank.save_csv(prefix)
+
         plt.tight_layout()
-        plt.savefig(file.replace('.perfetto-trace', '') + '_jank.png')
+        plt.savefig(prefix + '_jank.png')

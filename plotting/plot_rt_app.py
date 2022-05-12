@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 
 
 for file in sorted(os.listdir()):
-    if file.endswith(".csv"):
-        file = file.replace('.csv', '')
+    if file.endswith(".perfetto-trace"):
+        file = file.replace('.perfetto-trace', '')
         df_result = pd.read_csv(file + '.csv')
 
         trace = tp(file_path=file + '.perfetto-trace')
@@ -52,6 +52,10 @@ for file in sorted(os.listdir()):
         row_pos = runtime.plot(num_rows=num_rows, row_pos=row_pos, threads=threads)
 
         row_pos = table.subplot(df_result, num_rows=num_rows, row_pos=row_pos)
+
+        freq.save_csv(file)
+        pelt.save_csv(file)
+        runtime.save_csv(file)
 
         plt.tight_layout()
         plt.savefig(file + '.png')

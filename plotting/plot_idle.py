@@ -14,6 +14,11 @@ for file in sorted(os.listdir()):
         trace.close()
 
         plt.figure(figsize=(16,16))
+
+        prefix = file.replace('.perfetto-trace', '')
+
         idle.plot()
+        idle.save_csv(prefix)
+
         plt.tight_layout()
-        plt.savefig(file.replace('.perfetto-trace', '') + '_idle.png')
+        plt.savefig(prefix + '_idle.png')

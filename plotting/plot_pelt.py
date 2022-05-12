@@ -22,6 +22,11 @@ for file in sorted(os.listdir()):
         num_rows = pelt.num_rows(threads)
 
         plt.figure(figsize=(16,3*num_rows))
+
+        prefix = file.replace('.perfetto-trace', '')
+
         pelt.plot(threads=threads)
+        pelt.save_csv(prefix)
+
         plt.tight_layout()
-        plt.savefig(file.replace('.perfetto-trace', '') + '_pelt.png')
+        plt.savefig(prefix + '_pelt.png')

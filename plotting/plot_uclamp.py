@@ -22,6 +22,11 @@ for file in sorted(os.listdir()):
         num_rows = uclamp.num_rows(threads)
 
         plt.figure(figsize=(16,3*num_rows))
+
+        prefix = file.replace('.perfetto-trace', '')
+
         uclamp.plot(threads=threads)
+        uclamp.save_csv(prefix)
+
         plt.tight_layout()
-        plt.savefig(file.replace('.perfetto-trace', '') + '_uclamp.png')
+        plt.savefig(prefix + '_uclamp.png')

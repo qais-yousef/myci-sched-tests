@@ -87,5 +87,12 @@ row_pos = idle.plot(num_rows=num_rows, row_pos=row_pos)
 row_pos = thermal.plot(num_rows=num_rows, row_pos=row_pos)
 row_pos = power.plot(num_rows=num_rows, row_pos=row_pos)
 
+prefix = "{}_{}".format(target, workload)
+
+freq.save_csv(prefix)
+idle.save_csv(prefix)
+thermal.save_csv(prefix)
+power.save_csv(prefix)
+
 plt.tight_layout()
-plt.savefig("{}_{}_results.png".format(target, workload))
+plt.savefig(prefix + "_results.png")

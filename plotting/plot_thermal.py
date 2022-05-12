@@ -14,6 +14,11 @@ for file in sorted(os.listdir()):
         trace.close()
 
         plt.figure(figsize=(16,16))
+
+        prefix = file.replace('.perfetto-trace', '')
+
         thermal.plot()
+        thermal.save_csv(prefix)
+
         plt.tight_layout()
-        plt.savefig(file.replace('.perfetto-trace', '') + '_thermal.png')
+        plt.savefig(prefix + '_thermal.png')
