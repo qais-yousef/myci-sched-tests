@@ -1,5 +1,5 @@
 def call() {
 	sh """
-		plotting/plot_idle.py
+		flock /tmp/perfetto.lock plotting/plot_idle.py
 	"""
 }

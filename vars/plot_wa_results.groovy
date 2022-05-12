@@ -1,5 +1,5 @@
 def call(target, workload, metrics='') {
 	sh """
-		plotting/plot_wa_results.py ${target} ${workload} ${metrics}
+		flock /tmp/perfetto.lock plotting/plot_wa_results.py ${target} ${workload} ${metrics}
 	"""
 }

@@ -1,5 +1,5 @@
 def call() {
 	sh """
-		plotting/plot_frequency.py
+		flock /tmp/perfetto.lock plotting/plot_frequency.py
 	"""
 }

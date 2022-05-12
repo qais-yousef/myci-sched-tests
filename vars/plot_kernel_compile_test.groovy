@@ -1,5 +1,5 @@
 def call() {
 	sh """
-		plotting/plot_kernel_compile_test.py
+		flock /tmp/perfetto.lock plotting/plot_kernel_compile_test.py
 	"""
 }
