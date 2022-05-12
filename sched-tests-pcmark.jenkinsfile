@@ -81,6 +81,7 @@ pipeline {
 			steps {
 				archiveArtifacts artifacts: '*.tar.xz', followSymlinks: false
 				archiveArtifacts artifacts: '*.png', followSymlinks: false
+				archiveArtifacts artifacts: '*.csv', followSymlinks: false, allowEmptyArchive: true
 				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
 			}
 		}

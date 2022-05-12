@@ -69,6 +69,7 @@ pipeline {
 		stage('Archive') {
 			steps {
 				archiveArtifacts artifacts: '**/*.png', followSymlinks: false, allowEmptyArchive: true
+				archiveArtifacts artifacts: '**/*.csv', followSymlinks: false, allowEmptyArchive: true
 			}
 		}
 	}
