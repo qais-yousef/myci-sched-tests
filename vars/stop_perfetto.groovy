@@ -48,6 +48,11 @@ def call() {
 					fi
 
 					sleep 3
+
+					status=`adb devices | grep ${IPADDRESS} | awk '{print \$2}'`
+					if [ "x\$status" == "xoffline" ]; then
+						adb -s ${IPADDRESS}:${PORT} reconnect offline
+					fi
 				done
 
 				#
