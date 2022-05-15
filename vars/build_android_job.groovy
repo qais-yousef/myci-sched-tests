@@ -14,5 +14,6 @@ def call(test_name, quiet_period, run_dex2oat) {
 		if (run_dex2oat)
 			dir += '-dex2oat'
 		copyArtifacts filter: '*.png', fingerprintArtifacts: true, projectName: test_name, selector: specific(test.getNumber().toString()), target: dir
+		copyArtifacts filter: '**/*.csv', fingerprintArtifacts: true, projectName: test_name, selector: specific(test.getNumber().toString()), target: dir
 	}
 }
