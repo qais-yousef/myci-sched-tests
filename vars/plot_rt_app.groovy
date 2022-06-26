@@ -1,5 +1,5 @@
 def call() {
 	sh """
-		pflock /tmp/perfetto.lock lotting/plot_rt_app.py
+		flock /tmp/perfetto.lock plotting/plot_rt_app.py
 	"""
 }
