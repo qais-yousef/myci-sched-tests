@@ -2,7 +2,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import text
 
 query = "select ts, cpu, value as idle from counter as c left join cpu_counter_track as t on c.track_id = t.id where t.name = 'cpuidle'"
 
@@ -81,7 +80,6 @@ def plot(num_rows=0, row_pos=1, cpus=[]):
                     ax = df_duration.plot.bar(title='CPU{}'.format(cpu) + ' Idle residency %', alpha=0.75, color='grey')
                     ax.bar_label(ax.containers[0])
                     ax.set_xlabel('Idle State')
-                    text.plot(0.01, 0.98, "0 is NOT idle (IDLE_EXIT)")
                     plt.grid()
 
             if col:
