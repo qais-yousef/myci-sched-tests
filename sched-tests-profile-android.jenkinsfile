@@ -6,6 +6,7 @@ pipeline {
 		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
 		booleanParam(name: 'COLLECT_PELT', defaultValue: false, description: 'Collect PELT data and produce plots')
 		booleanParam(name: 'COLLECT_UCLAMP', defaultValue: false, description: 'Collect UCLAMP data and produce plots')
+		booleanParam(name: 'COLLECT_RQ_PRESSURE', defaultValue: false, description: 'Collect rq pressue data and produce plots')
 		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
 		string(name: 'ITERATIONS', defaultValue: '3', description: 'Number of iterations to run')
 		string(name: 'DELAY', defaultValue: '10', description: 'Time in seconds to wait between each run.')
@@ -24,7 +25,7 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${MYCI_BRANCH}"
-				verify_params(!env.QUIET_PERIOD || !env.COLLECT_PELT || !env.COLLECT_UCLAMP)
+				verify_params(!env.QUIET_PERIOD || !env.COLLECT_PELT || !env.COLLECT_UCLAMP || !env.COLLECT_RQ_PRESSURE))
 				set_description()
 			}
 		}

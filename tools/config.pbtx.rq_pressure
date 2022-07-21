@@ -1,0 +1,14 @@
+data_sources: {
+	config {
+		name: "linux.ftrace"
+		ftrace_config {
+
+			ftrace_events: "sched/sched_pelt_irq"
+			ftrace_events: "sched/sched_pelt_rt"
+			ftrace_events: "sched/sched_pelt_thermal"
+
+			buffer_size_kb: 16384
+			drain_period_ms: 1000
+		}
+	}
+}

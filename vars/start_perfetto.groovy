@@ -7,6 +7,10 @@ def call(name, configs="") {
 		env.COLLECT_UCLAMP = 'false'
 	}
 
+	if (!env.COLLECT_RQ_PRESSURE) {
+		env.COLLECT_RQ_PRESSURE = 'false'
+	}
+
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
 		if (env.IPADDRESS && env.PORT) {
@@ -27,6 +31,10 @@ def call(name, configs="") {
 
 				if [ "${COLLECT_UCLAMP}" == "true" ]; then
 					configs="\$configs uclamp"
+				fi
+
+				if [ "${COLLECT_RQ_PRESSURE}" == "true" ]; then
+					configs="\$configs rq_pressure"
 				fi
 
 				for config in \$configs
@@ -56,6 +64,10 @@ def call(name, configs="") {
 
 			if [ "${COLLECT_UCLAMP}" == "true" ]; then
 				configs="\$configs uclamp"
+			fi
+
+			if [ "${COLLECT_RQ_PRESSURE}" == "true" ]; then
+				configs="\$configs rq_pressure"
 			fi
 
 			for config in \$configs
