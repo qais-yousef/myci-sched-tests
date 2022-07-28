@@ -53,7 +53,7 @@ def call(name, configs="") {
 	case "linux":
 		sh """
 			# Cleanup any potential leftover run..
-			kill -TERM `cat perfetto.pid` || true
+			pkill -TERM tracebox || true
 			sleep 3
 
 			configs="${configs}"
