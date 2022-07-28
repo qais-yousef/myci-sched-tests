@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from perfetto.trace_processor import TraceProcessor as tp
+import trace_processor as tp
 import jank
 import os
 
@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 for file in sorted(os.listdir()):
     if file.endswith(".perfetto-trace"):
-        trace = tp(file_path=file)
+        trace = tp.get_trace(file)
         jank.init(trace)
         trace.close()
 

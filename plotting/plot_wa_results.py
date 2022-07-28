@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import pandas as pd
 import matplotlib.pyplot as plt
-from perfetto.trace_processor import TraceProcessor as tp
+import trace_processor as tp
 import glob
 import sys
 import freq
@@ -32,7 +32,7 @@ else:
 #
 for file in sorted(os.listdir()):
     if file.endswith(".perfetto-trace"):
-        trace = tp(file_path=file)
+        trace = tp.get_trace(file)
         freq.init(trace)
         idle.init(trace)
         thermal.init(trace)

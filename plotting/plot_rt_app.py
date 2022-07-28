@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import pandas as pd
-from perfetto.trace_processor import TraceProcessor as tp
+import trace_processor as tp
 import freq
 import pelt
 import runtime
@@ -17,7 +17,7 @@ for file in sorted(os.listdir()):
         file = file.replace('.perfetto-trace', '')
         df_result = pd.read_csv(file + '.csv')
 
-        trace = tp(file_path=file + '.perfetto-trace')
+        trace = tp.get_trace(file + '.perfetto-trace')
         freq.init(trace)
         pelt.init(trace)
         runtime.init(trace)
