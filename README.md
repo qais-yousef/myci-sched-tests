@@ -12,6 +12,9 @@
 
 - uclampset
 - sysbench
+- cyclictest
+- iperf
+- dd
 
 ### uclampset
 
@@ -41,6 +44,18 @@ On Linux systems you can just install it
 On Android, you need to follow best way to get binaries for your arch
 
 [https://github.com/akopytov/sysbench](https://github.com/akopytov/sysbench)
+
+### cyclictest
+
+If you're running cyclictest as jenkins user, you might want to
+
+```
+sudo chown root:trace /usr/local/bin/cyclictest
+sudo chmod u+s,o-x /usr/local/bin/cyclictest
+```
+
+to allow running it without having to give jenkins user sudo power or admin
+capabilities.
 
 ## On Android DUT
 

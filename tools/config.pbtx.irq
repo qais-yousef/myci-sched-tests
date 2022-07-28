@@ -1,0 +1,12 @@
+data_sources: {
+	config {
+		name: "linux.ftrace"
+		ftrace_config {
+
+			atrace_categories: "irq"
+
+			buffer_size_kb: 16384
+			drain_period_ms: 1000
+		}
+	}
+}

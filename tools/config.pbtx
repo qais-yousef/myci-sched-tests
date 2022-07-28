@@ -38,7 +38,7 @@ data_sources: {
 			#atrace_categories: "dalvik"
 			atrace_categories: "freq"
 			atrace_categories: "regulators"
-			#atrace_categories: "network"
+			atrace_categories: "network"
 			#atrace_categories: "binder_driver"
 			#atrace_categories: "hal"
 			#atrace_categories: "view"

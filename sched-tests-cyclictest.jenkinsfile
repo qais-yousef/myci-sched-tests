@@ -1,0 +1,112 @@
+pipeline {
+	agent { label params.NODE }
+
+	parameters {
+		string(name: 'NODE', defaultValue: '', description: 'The DUT to run on.')
+		string(name: 'DESCRIPTION', defaultValue: '', description: 'Describe your experiment so that we have a meaningful name for this run to return to')
+		booleanParam(name: 'COLLECT_PELT', defaultValue: false, description: 'Collect PELT data and produce plots')
+		booleanParam(name: 'COLLECT_UCLAMP', defaultValue: false, description: 'Collect UCLAMP data and produce plots')
+		booleanParam(name: 'COLLECT_RQ_PRESSURE', defaultValue: false, description: 'Collect rq pressue data and produce plots')
+		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
+		string(name: 'PRIORITY', defaultValue: '1', description: 'Priority of RT tasks')
+		string(name: 'DURATION', defaultValue: '300', description: 'Time in seconds to run the cyclictest for.')
+		string(name: 'INTERVAL', defaultValue: '10000', description: 'Period in micro seconds for cyclictest RT tasks.')
+		booleanParam(name: 'RUN_IPERF', defaultValue: false, description: "Run iperf UDP in parallel to introduce network stress.")
+		string(name: 'UDP_BANDWIDTH', defaultValue: '100m', description: 'Bandwidth of network activity. You can use k, m, g postfix.')
+		booleanParam(name: 'RUN_DD', defaultValue: false, description: "Run dd to generate block device activity.")
+		string(name: 'FILE_SIZE', defaultValue: '100', description: 'Size of file to write in MiB.')
+	}
+
+	environment {
+		MYCI_BRANCH = "${BRANCH}"
+	}
+
+	options {
+		buildDiscarder logRotator(artifactDaysToKeepStr: '7', artifactNumToKeepStr: '10', daysToKeepStr: '7', numToKeepStr: '10')
+	}
+
+	stages {
+		stage('Init') {
+			steps {
+				library "sched-tests-utils@${MYCI_BRANCH}"
+				verify_params(!env.COLLECT_PELT || !env.COLLECT_UCLAMP || !env.COLLECT_RQ_PRESSURE)
+				verify_params(!env.RUN_IPERF || !env.UDP_BANDWIDTH)
+				verify_params(!env.RUN_DD || !env.FILE_SIZE)
+				set_description()
+			}
+		}
+		stage('Connect') {
+			steps {
+				script {
+					if (env.MYCI_NODE_TYPE == "android") {
+						verify_android()
+						connect()
+						android_wakeup_device()
+					}
+				}
+			}
+		}
+		stage('Run') {
+			parallel {
+				stage('Cyclictest') {
+					steps {
+						start_perfetto("cyclictest", "irq")
+						run_cyclictest(env.PRIORITY, env.DURATION, env.INTERVAL)
+						stop_perfetto()
+					}
+				}
+				stage('IPERF UDP') {
+					when {
+						expression {
+							return env.RUN_IPERF == 'true';
+						}
+					}
+					steps {
+						run_iperf_parallel(env.UDP_BANDWIDTH, env.DURATION)
+					}
+				}
+				stage('dd') {
+					when {
+						expression {
+							return env.RUN_DD == 'true';
+						}
+					}
+					steps {
+						run_dd_parallel(env.FILE_SIZE)
+					}
+				}
+				stage('(Workaround)') {
+					steps {
+						sleep 3
+					}
+				}
+			}
+		}
+		stage('Generate Plots') {
+			steps {
+				plot_pelt(env.COLLECT_PELT == 'true', "pcmark")
+				plot_uclamp(env.COLLECT_UCLAMP == 'true', "pcmark")
+				plot_rq_pressure(env.COLLECT_RQ_PRESSURE == 'true')
+			}
+		}
+		stage('Archive') {
+			steps {
+				archiveArtifacts artifacts: '*.png', followSymlinks: false, allowEmptyArchive: true
+				archiveArtifacts artifacts: '*.csv', followSymlinks: false, allowEmptyArchive: true
+				archiveArtifacts artifacts: '*.json', followSymlinks: false, allowEmptyArchive: true
+				archiveArtifacts artifacts: '*.perfetto-trace', followSymlinks: false, allowEmptyArchive: true
+			}
+		}
+	}
+	post {
+		always {
+			script {
+				if (env.MYCI_NODE_TYPE == "android") {
+					android_doze_device()
+					disconnect()
+				}
+			}
+			cleanWs()
+		}
+	}
+}
