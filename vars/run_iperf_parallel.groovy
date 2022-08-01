@@ -1,4 +1,4 @@
-def call(bandwidth, duration) {
+def call(bandwidth, duration, num_threads) {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
 		if (env.IPADDRESS && env.PORT) {
@@ -23,7 +23,7 @@ def call(bandwidth, duration) {
 					# Run iperf
 					#
 					adb -s ${IPADDRESS}:${PORT} shell "iperf3 -s -D"
-					adb -s ${IPADDRESS}:${PORT} shell "iperf3 -c localhost -u -b ${bandwidth} -t ${duration} -i 1"
+					adb -s ${IPADDRESS}:${PORT} shell "iperf3 -c localhost -u -b ${bandwidth} -t ${duration} -i 1 -P ${num_threads}"
 					adb -s ${IPADDRESS}:${PORT} shell "pkill -9 iperf3"
 
 					sleep 1
@@ -55,7 +55,7 @@ def call(bandwidth, duration) {
 				# Run iperf
 				#
 				iperf -s -D
-				iperf -c localhost -u -b ${bandwidth} -t ${duration} -i 1
+				iperf -c localhost -u -b ${bandwidth} -t ${duration} -i 1 -P ${num_threads}
 				pkill -9 iperf
 
 				sleep 1

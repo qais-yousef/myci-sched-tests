@@ -11,6 +11,7 @@ pipeline {
 		string(name: 'PRIORITY', defaultValue: '1', description: 'Priority of RT tasks')
 		string(name: 'DURATION', defaultValue: '300', description: 'Time in seconds to run the cyclictest for.')
 		string(name: 'INTERVAL', defaultValue: '10000', description: 'Period in micro seconds for cyclictest RT tasks.')
+		string(name: 'NUM_THREADS', defaultValue: '1', description: 'Number of threads to spawn.')
 		booleanParam(name: 'RUN_IPERF', defaultValue: false, description: "Run iperf UDP in parallel to introduce network stress.")
 		string(name: 'UDP_BANDWIDTH', defaultValue: '100m', description: 'Bandwidth of network activity. You can use k, m, g postfix.')
 		booleanParam(name: 'RUN_DD', defaultValue: false, description: "Run dd to generate block device activity.")
@@ -29,6 +30,7 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${MYCI_BRANCH}"
+				verify_params(!env.PRIORITY || !env.DURATION || !env.INTERVAL || !env.NUM_THREADS)
 				verify_params(!env.COLLECT_PELT || !env.COLLECT_UCLAMP || !env.COLLECT_RQ_PRESSURE)
 				verify_params(!env.RUN_IPERF || !env.UDP_BANDWIDTH)
 				verify_params(!env.RUN_DD || !env.FILE_SIZE)
@@ -51,7 +53,7 @@ pipeline {
 				stage('Cyclictest') {
 					steps {
 						start_perfetto("cyclictest", "irq")
-						run_cyclictest(env.PRIORITY, env.DURATION, env.INTERVAL)
+						run_cyclictest(env.PRIORITY, env.DURATION, env.INTERVAL, env.NUM_THREADS)
 						stop_perfetto()
 					}
 				}
@@ -62,7 +64,7 @@ pipeline {
 						}
 					}
 					steps {
-						run_iperf_parallel(env.UDP_BANDWIDTH, env.DURATION)
+						run_iperf_parallel(env.UDP_BANDWIDTH, env.DURATION, env.NUM_THREADS)
 					}
 				}
 				stage('dd') {
@@ -72,7 +74,7 @@ pipeline {
 						}
 					}
 					steps {
-						run_dd_parallel(env.FILE_SIZE)
+						run_dd_parallel(env.FILE_SIZE, env.NUM_THREADS)
 					}
 				}
 				stage('(Workaround)') {

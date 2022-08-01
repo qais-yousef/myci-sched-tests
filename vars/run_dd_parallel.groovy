@@ -1,4 +1,4 @@
-def call(filesize) {
+def call(filesize, num_threads) {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
 		if (env.IPADDRESS && env.PORT) {
@@ -23,8 +23,11 @@ def call(filesize) {
 					# Run dd
 					#
 					file="/data/myci.dd.file"
-					adb -s ${IPADDRESS}:${PORT} shell "dd if=/dev/zero  of=\$file bs=1M count=${filesize}"
-					adb -s ${IPADDRESS}:${PORT} shell "rm -f \$file"
+					for i in \$(seq ${num_threads})
+					do
+						adb -s ${IPADDRESS}:${PORT} shell "dd if=/dev/zero  of=\$file.\$i bs=1M count=${filesize}"
+					done
+					adb -s ${IPADDRESS}:${PORT} shell "rm -f \$file*"
 
 					sleep 3
 				done
@@ -55,8 +58,11 @@ def call(filesize) {
 				# Run dd
 				#
 				file="/tmp/myci.dd.file"
-				dd if=/dev/zero  of=\$file bs=1M count=${filesize}
-				rm -f \$file
+				for i in \$(seq ${num_threads})
+				do
+					dd if=/dev/zero  of=\$file.\$i bs=1M count=${filesize}
+				done
+				rm -f \$file*
 
 				sleep 3
 			done
