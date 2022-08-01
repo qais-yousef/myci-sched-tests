@@ -23,10 +23,12 @@ def call(filesize, num_threads) {
 					# Run dd
 					#
 					file="/data/myci.dd.file"
-					for i in \$(seq ${num_threads})
-					do
-						adb -s ${IPADDRESS}:${PORT} shell "dd if=/dev/zero  of=\$file.\$i bs=1M count=${filesize}"
-					done
+					adb -s ${IPADDRESS}:${PORT} shell "					\
+					for i in \\\$(seq ${num_threads});					\
+					do									\
+						dd if=/dev/zero  of=\$file.\$i bs=1M count=${filesize} &	\
+					done;									\
+					wait"
 					adb -s ${IPADDRESS}:${PORT} shell "rm -f \$file*"
 
 					sleep 3
@@ -60,8 +62,9 @@ def call(filesize, num_threads) {
 				file="/tmp/myci.dd.file"
 				for i in \$(seq ${num_threads})
 				do
-					dd if=/dev/zero  of=\$file.\$i bs=1M count=${filesize}
+					dd if=/dev/zero  of=\$file.\$i bs=1M count=${filesize} &
 				done
+				wait
 				rm -f \$file*
 
 				sleep 3
