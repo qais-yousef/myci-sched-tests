@@ -11,6 +11,10 @@ def call(name, configs="") {
 		env.COLLECT_RQ_PRESSURE = 'false'
 	}
 
+	if (!env.COLLECT_IRQ) {
+		env.COLLECT_IRQ = 'false'
+	}
+
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
 		if (env.IPADDRESS && env.PORT) {
@@ -35,6 +39,10 @@ def call(name, configs="") {
 
 				if [ "${COLLECT_RQ_PRESSURE}" == "true" ]; then
 					configs="\$configs rq_pressure"
+				fi
+
+				if [ "${COLLECT_IRQ}" == "true" ]; then
+					configs="\$configs irq"
 				fi
 
 				for config in \$configs
@@ -68,6 +76,10 @@ def call(name, configs="") {
 
 			if [ "${COLLECT_RQ_PRESSURE}" == "true" ]; then
 				configs="\$configs rq_pressure"
+			fi
+
+			if [ "${COLLECT_IRQ}" == "true" ]; then
+				configs="\$configs irq"
 			fi
 
 			for config in \$configs

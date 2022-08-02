@@ -7,6 +7,7 @@ pipeline {
 		booleanParam(name: 'COLLECT_PELT', defaultValue: false, description: 'Collect PELT data and produce plots')
 		booleanParam(name: 'COLLECT_UCLAMP', defaultValue: false, description: 'Collect UCLAMP data and produce plots')
 		booleanParam(name: 'COLLECT_RQ_PRESSURE', defaultValue: false, description: 'Collect rq pressue data and produce plots')
+		booleanParam(name: 'COLLECT_IRQ', defaultValue: false, description: 'Collect irq/softirq data and produce plots')
 		string(name: 'BRANCH', defaultValue: "${MYCI_BRANCH}", description: 'Which branch to run from? For power users experimenting/developing new changes.')
 		string(name: 'PRIORITY', defaultValue: '1', description: 'Priority of RT tasks')
 		string(name: 'DURATION', defaultValue: '300', description: 'Time in seconds to run the cyclictest for.')
@@ -31,7 +32,7 @@ pipeline {
 			steps {
 				library "sched-tests-utils@${MYCI_BRANCH}"
 				verify_params(!env.PRIORITY || !env.DURATION || !env.INTERVAL || !env.NUM_THREADS)
-				verify_params(!env.COLLECT_PELT || !env.COLLECT_UCLAMP || !env.COLLECT_RQ_PRESSURE)
+				verify_params(!env.COLLECT_PELT || !env.COLLECT_UCLAMP || !env.COLLECT_RQ_PRESSURE || !env.COLLECT_IRQ)
 				verify_params(!env.RUN_IPERF || !env.UDP_BANDWIDTH)
 				verify_params(!env.RUN_DD || !env.FILE_SIZE)
 				set_description()
@@ -52,7 +53,7 @@ pipeline {
 			parallel {
 				stage('Cyclictest') {
 					steps {
-						start_perfetto("cyclictest", "irq")
+						start_perfetto("cyclictest")
 						run_cyclictest(env.PRIORITY, env.DURATION, env.INTERVAL, env.NUM_THREADS)
 						stop_perfetto()
 					}
