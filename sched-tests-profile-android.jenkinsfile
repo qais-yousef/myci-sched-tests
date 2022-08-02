@@ -25,7 +25,7 @@ pipeline {
 		stage('Init') {
 			steps {
 				library "sched-tests-utils@${MYCI_BRANCH}"
-				verify_params(!env.QUIET_PERIOD || !env.COLLECT_PELT || !env.COLLECT_UCLAMP || !env.COLLECT_RQ_PRESSURE))
+				verify_params(!env.QUIET_PERIOD || !env.COLLECT_PELT || !env.COLLECT_UCLAMP || !env.COLLECT_RQ_PRESSURE)
 				set_description()
 			}
 		}
