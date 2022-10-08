@@ -51,7 +51,7 @@ def call(filesize, num_threads) {
 				# which a sign the other test finished
 				# We could replace this with something more deterministic in the future.
 				#
-				perfetto_running=`ps -e | grep tracebox || true`
+				perfetto_running=`ps -e | grep cyclictest || true`
 				if [ "x\$perfetto_running" == "x" ]; then
 					break
 				fi
