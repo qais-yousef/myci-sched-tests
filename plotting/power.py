@@ -94,9 +94,9 @@ def plot(num_rows=0, row_pos=1):
             pass
 
         try:
-            df_power['duration'] = pd.Series()
-            df_power['energy_diff'] = pd.Series()
-            df_power['power'] = pd.Series()
+            df_power['duration'] = pd.Series(dtype='float64')
+            df_power['energy_diff'] = pd.Series(dtype='float64')
+            df_power['power'] = pd.Series(dtype='float64')
 
             color = ['r', 'y', 'b']
             i = 0
