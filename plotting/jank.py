@@ -5,8 +5,11 @@ import matplotlib.pyplot as plt
 import table
 import text
 
-query = "select ts, dur, surface_frame_token as app_token, display_frame_token, " \
-    "jank_type, on_time_finish, present_type, layer_name, process.name from actual_frame_timeline_slice left join process using(upid)"
+query = """
+    select ts, dur, surface_frame_token as app_token, display_frame_token,
+    jank_type, on_time_finish, present_type, layer_name, process.name
+    from actual_frame_timeline_slice left join process using(upid)
+    """
 
 df_jank = None
 processes = None
