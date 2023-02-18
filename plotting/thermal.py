@@ -27,6 +27,8 @@ def __init():
         global df_thermal
         if df_thermal is None:
             df_thermal = trace_thermal.as_pandas_dataframe()
+            if df_thermal.empty:
+                return
             df_thermal.ts = df_thermal.ts - df_thermal.ts[0]
             df_thermal.ts = df_thermal.ts / 1000000000
             df_thermal['_ts'] = df_thermal.ts
