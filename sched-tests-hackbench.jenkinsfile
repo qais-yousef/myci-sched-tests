@@ -41,7 +41,7 @@ pipeline {
 				fixup_agenda("agendas/hackbench.yaml", "ITERATIONS", env.ITERATIONS)
 				fixup_agenda("agendas/hackbench.yaml", "DELAY", env.DELAY)
 				fixup_agenda("agendas/hackbench.yaml", "LOOPS", env.LOOPS)
-				fixup_agenda("agendas/hackbench.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
+				fixup_agenda("agendas/hackbench.yaml", "DEVICE", env.ANDROID_SERIAL)
 			}
 		}
 		stage('Run') {

@@ -1,7 +1,7 @@
 def call() {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
-		if (env.IPADDRESS && env.PORT) {
+		if (env.ANDROID_SERIAL) {
 			sh """
 				# Give a chance to whatever other testing
 				# running in parallel to start first
@@ -20,7 +20,7 @@ def call() {
 					#
 					# TODO: find a way to force dex2oat to exit without rebooting the phone.
 					#
-					perfetto_running=`adb -s ${IPADDRESS}:${PORT} shell -x 'ps -e | grep perfetto'`
+					perfetto_running=`adb shell -x 'ps -e | grep perfetto'`
 					if [ "x\$perfetto_running" == "x" ]; then
 						break
 					fi
@@ -31,13 +31,13 @@ def call() {
 					stop=5
 					for count in \$(seq \$stop)
 					do
-						dex2oat_running=`adb -s ${IPADDRESS}:${PORT} shell -x 'ps -e | grep dex2oat'`
+						dex2oat_running=`adb shell -x 'ps -e | grep dex2oat'`
 						if [ "x\$dex2oat_running" == "x" ]; then
 
 							if [ \$count -eq \$stop ]; then
 								echo "Iteration [\$i]"
 								((i+=1))
-								adb -s ${IPADDRESS}:${PORT} shell -x 'cmd package compile -m speed-profile -f -a' &
+								adb shell -x 'cmd package compile -m speed-profile -f -a' &
 							else
 								sleep 1
 							fi
@@ -50,7 +50,7 @@ def call() {
 				done
 			"""
 		} else {
-			error "Missing IPADDRESS and/or PORT info"
+			error "Missing ANDROID_SERIAL"
 		}
 		break
 	case "linux":

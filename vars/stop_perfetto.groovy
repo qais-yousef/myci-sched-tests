@@ -1,23 +1,23 @@
 def call() {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
-		if (env.IPADDRESS && env.PORT) {
+		if (env.ANDROID_SERIAL) {
 			sh """
 				#
 				# Kill perfetto process to dump the trace
 				#
-				adb -s ${IPADDRESS}:${PORT} shell -x "killall perfetto"
+				adb shell -x "killall perfetto"
 
 				#
 				# Make sure trace dump has finished before pulling the file
 				#
-				TRACE_F=`adb -s ${IPADDRESS}:${PORT} shell "find /data/misc/perfetto-traces/myci -name '*.perfetto-trace'"`
+				TRACE_F=`adb shell "find /data/misc/perfetto-traces/myci -name '*.perfetto-trace'"`
 
 				size_a=0
 				size_b=0
 				while true
 				do
-					size_a=`adb -s ${IPADDRESS}:${PORT} shell "ls -l \$TRACE_F" | awk '{print \$5}'`
+					size_a=`adb shell "ls -l \$TRACE_F" | awk '{print \$5}'`
 
 					if [ \$size_a -eq \$size_b ]; then
 						break
@@ -38,9 +38,9 @@ def call() {
 				do
 					if [ \$i -eq \$retry ]; then
 						# Make sure to propagate the failure on last retry
-						adb -s ${IPADDRESS}:${PORT} pull \$TRACE_F
+						adb pull \$TRACE_F
 					else
-						adb -s ${IPADDRESS}:${PORT} pull \$TRACE_F || true
+						adb pull \$TRACE_F || true
 					fi
 
 					if [ -e *.perfetto-trace ]; then
@@ -49,19 +49,19 @@ def call() {
 
 					sleep 3
 
-					status=`adb devices | grep ${IPADDRESS} | awk '{print \$2}'`
+					status=`adb devices | grep ${ANDROID_SERIAL} | awk '{print \$2}'`
 					if [ "x\$status" == "xoffline" ]; then
-						adb -s ${IPADDRESS}:${PORT} reconnect offline
+						adb reconnect offline
 					fi
 				done
 
 				#
 				# Don't leave leftovers..
 				#
-				adb -s ${IPADDRESS}:${PORT} shell rm \$TRACE_F
+				adb shell rm \$TRACE_F
 			"""
 		} else {
-			error "Missing IPADDRESS and/or PORT info"
+			error "Missing ANDROID_SERIAL"
 		}
 		break
 	case "linux":

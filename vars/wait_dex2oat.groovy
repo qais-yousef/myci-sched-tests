@@ -1,13 +1,13 @@
 def call() {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
-		if (env.IPADDRESS && env.PORT) {
+		if (env.ANDROID_SERIAL) {
 			sh """
 				counter=0
 				stop=5
 				while true
 				do
-					running=`adb -s ${IPADDRESS}:${PORT} shell -x 'ps -e | grep dex2oat'`
+					running=`adb shell -x 'ps -e | grep dex2oat'`
 
 					if [ "x\$running" == "x" ]; then
 						((counter+=1))
@@ -23,7 +23,7 @@ def call() {
 				done
 			"""
 		} else {
-			error "Missing IPADDRESS and/or PORT info"
+			error "Missing ANDROID_SERIAL"
 		}
 		break
 	case "linux":

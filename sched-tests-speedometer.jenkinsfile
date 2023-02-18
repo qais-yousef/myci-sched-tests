@@ -39,7 +39,7 @@ pipeline {
 			steps {
 				fixup_agenda("agendas/speedometer.yaml", "ITERATIONS", env.ITERATIONS)
 				fixup_agenda("agendas/speedometer.yaml", "DELAY", env.DELAY)
-				fixup_agenda("agendas/speedometer.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
+				fixup_agenda("agendas/speedometer.yaml", "DEVICE", env.ANDROID_SERIAL)
 			}
 		}
 		stage('Run') {

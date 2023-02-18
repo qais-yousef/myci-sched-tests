@@ -39,7 +39,7 @@ pipeline {
 			steps {
 				fixup_agenda("agendas/pcmark.yaml", "ITERATIONS", env.ITERATIONS)
 				fixup_agenda("agendas/pcmark.yaml", "DELAY", env.DELAY)
-				fixup_agenda("agendas/pcmark.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
+				fixup_agenda("agendas/pcmark.yaml", "DEVICE", env.ANDROID_SERIAL)
 			}
 		}
 		stage('Run') {

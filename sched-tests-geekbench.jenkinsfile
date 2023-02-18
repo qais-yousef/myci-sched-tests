@@ -39,7 +39,7 @@ pipeline {
 			steps {
 				fixup_agenda("agendas/geekbench.yaml", "ITERATIONS", env.ITERATIONS)
 				fixup_agenda("agendas/geekbench.yaml", "DELAY", env.DELAY)
-				fixup_agenda("agendas/geekbench.yaml", "DEVICE", env.IPADDRESS+":"+env.PORT)
+				fixup_agenda("agendas/geekbench.yaml", "DEVICE", env.ANDROID_SERIAL)
 			}
 		}
 		stage('Run') {

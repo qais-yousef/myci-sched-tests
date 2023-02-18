@@ -9,15 +9,15 @@ def call(name, configs="") {
 
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
-		if (env.IPADDRESS && env.PORT) {
+		if (env.ANDROID_SERIAL) {
 			sh """
 				# Cleanup any potential leftover run..
-				adb -s ${IPADDRESS}:${PORT} shell -x "killall perfetto"
+				adb shell -x "killall perfetto"
 				sleep 3
 
 				# Create our own directory to store perfetto-trace and clean any potential leftover
-				adb -s ${IPADDRESS}:${PORT} shell "mkdir -p /data/misc/perfetto-traces/myci/"
-				adb -s ${IPADDRESS}:${PORT} shell "rm -f /data/misc/perfetto-traces/myci/*.perfetto-trace"
+				adb shell "mkdir -p /data/misc/perfetto-traces/myci/"
+				adb shell "rm -f /data/misc/perfetto-traces/myci/*.perfetto-trace"
 
 				configs="${configs}"
 
@@ -34,12 +34,12 @@ def call(name, configs="") {
 					cat ./tools/config.pbtx.\$config >> ./tools/config.pbtx
 				done
 
-				cat ./tools/config.pbtx | adb -s ${IPADDRESS}:${PORT} shell \
+				cat ./tools/config.pbtx | adb shell \
 					perfetto -d -c - --txt -o /data/misc/perfetto-traces/myci/${name}.perfetto-trace
 
 			"""
 		} else {
-			error "Missing IPADDRESS and/or PORT info"
+			error "Missing ANDROID_SERIAL"
 		}
 		break
 	case "linux":

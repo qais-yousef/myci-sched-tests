@@ -1,7 +1,7 @@
 def call(iterations, delay) {
 	switch (env.MYCI_NODE_TYPE) {
 	case "android":
-		if (env.IPADDRESS && env.PORT) {
+		if (env.ANDROID_SERIAL) {
 			sh """
 				for i in \$(seq ${iterations})
 				do
@@ -12,13 +12,13 @@ def call(iterations, delay) {
 					# Swipe up to ensure the screen stays on
 					# We can easily exceed 30mins timeout if number of iterations is 5
 					# on some systems for instance.
-					adb -s ${IPADDRESS}:${PORT} shell input touchscreen swipe 200 800 200 700
+					adb shell input touchscreen swipe 200 800 200 700
 
-					adb -s ${IPADDRESS}:${PORT} shell -x 'cmd package compile -m speed-profile -f -a'
+					adb shell -x 'cmd package compile -m speed-profile -f -a'
 				done
 			"""
 		} else {
-			error "Missing IPADDRESS and/or PORT info"
+			error "Missing ANDROID_SERIAL"
 		}
 		break
 	case "linux":
