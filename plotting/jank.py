@@ -64,13 +64,16 @@ def plot(num_rows=0, row_pos=1, names=[]):
                         continue
 
                 df_jank_process = df_jank[df_jank.name == name].copy()
-                df_janky_frames = df_jank_process[df_jank_process.jank_type != 'None'].copy()
+                df_janky_frames = df_jank_process[df_jank_process.jank_type == 'App Deadline Missed'].copy()
 
                 plt.subplot(num_rows, 1, row_pos)
                 row_pos += 1
                 df_jank_process.dur.plot(title=name + ' Frame Duration', alpha=0.75, style='o', color='g', xlim=(df_jank.index[0], df_jank.index[-1]))
-                df_janky_frames.dur.plot(alpha=0.5, style='o', color='r', label='janks', legend=True)
-                text.plot(0.01, 1.1, "Janks: {}".format(df_janky_frames.dur.count()))
+                if not df_janky_frames.empty:
+                    df_janky_frames.dur.plot(alpha=0.5, style='o', color='r', label='janks', legend=True)
+                    text.plot(0.01, 1.1, "Janks: {}".format(df_janky_frames.dur.count()))
+                else:
+                    text.plot(0.01, 1.1, "Janks: 0")
                 plt.grid()
 
                 plt.subplot(num_rows, 1, row_pos)
